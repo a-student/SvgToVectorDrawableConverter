@@ -1,7 +1,7 @@
-# SVG to VectorDrawable Converter
+﻿# SVG to VectorDrawable Converter
 Batch converter of SVG images to Android VectorDrawable XML resource files.
 
-Put the output XML files into the �res/drawable� directory of your app and reference to them in XML / Java code as to ordinary drawables.
+Put the output XML files into the ‘res/drawable’ directory of your app and reference to them in XML / Java code as to ordinary drawables.
 
 ## Requirements
 Inkscape (free and open-source vector graphics software) must be installed. Download it from https://inkscape.org/en/download
@@ -9,7 +9,8 @@ Inkscape (free and open-source vector graphics software) must be installed. Down
 The converter can be downloaded from https://github.com/a-student/SvgToVectorDrawableConverter/releases
 
 ## Running on Windows
-.NET Framework 4.5 or higher is required. Usually it is already installed on your operating system (enabled by default in Windows 8). If you have older OS, please search the Microsoft web site for .NET Framework, download and install it.
+.NET Framework 4.5 or higher is required. Usually it is already installed on your operating system (enabled by default in Windows 8).
+If you have older OS, please search the Microsoft web site for .NET Framework, download and install it.
 
 Open command prompt and run
 ```
@@ -38,11 +39,22 @@ mono svg2vd.exe -i *
 ```
 (Converts all SVG files in current directory.)
 
-## Not supported SVG elements
-These SVG elements are not supported by VectorDrawable: patterns, masks, gradients. You need to manually eliminate them from the input files before conversion.
+## Not supported SVG features
+These SVG elements are not supported by VectorDrawable: **patterns, masks, gradients.** You need to manually eliminate them from the input files before conversion.
+
+VectorDrawable **fill-rule** is always **nonzero** and cannot be changed.
+If you end up with areas filled that should not be filled, that is because the SVG image was created using even-odd rule instead.
+This problem can only be fixed manually in vector graphics software.
+
+If you are using Inkscape, open *Object* → *Fill and Stroke…* and in the *Fill* tab choose *Fill is solid unless a subpath is counterdirectional.*
+If you see improperly filled area after this operation, using F2 tool select subpath around that area and apply *Path* → *Reverse* command from the main menu.
+
+If you are using Sketch, select the path, right to the *Fills* property title there is settings icon, click it and choose *Non-Zero* option.
+To reverse the path direction apply *Layer* → *Paths* → *Reverse Order* command from the main menu.
 
 ## Issues
-If you have any problems with the converter, please create an issue on GitHub (https://github.com/a-student/SvgToVectorDrawableConverter/issues/new), explain the reproducing steps, and add link to the SVG file (link is optional but highly recommended).
+If you have any problems with the converter, please create an issue on GitHub (https://github.com/a-student/SvgToVectorDrawableConverter/issues/new),
+explain the reproducing steps, and add link to the SVG file (link is optional but highly recommended).
 
 ## Alternatives
 Less powerful but online converter http://inloop.github.io/svg2android
