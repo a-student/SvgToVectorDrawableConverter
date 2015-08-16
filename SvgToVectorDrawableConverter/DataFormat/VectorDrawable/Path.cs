@@ -128,5 +128,13 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
                 SetAttribute(value, "auto");
             }
         }
+
+        public FillType FillType
+        {
+            set
+            {
+                SetAttribute(value, "auto");
+            }
+        }
     }
 }

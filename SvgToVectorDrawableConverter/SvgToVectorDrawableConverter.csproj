@@ -68,6 +68,7 @@
     <Compile Include="DataFormat\ScalableVectorGraphics\SvgDocumentWrapper.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Title.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Transform.cs" />
+    <Compile Include="DataFormat\VectorDrawable\FillType.cs" />
     <Compile Include="DataFormat\VectorDrawable\Group.cs" />
     <Compile Include="DataFormat\VectorDrawable\Path.cs" />
     <Compile Include="DataFormat\VectorDrawable\Vector.cs" />

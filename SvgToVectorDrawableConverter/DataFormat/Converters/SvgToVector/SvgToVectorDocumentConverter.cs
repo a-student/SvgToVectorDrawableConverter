@@ -143,6 +143,17 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                     case "stroke-miterlimit":
                         vdPath.StrokeMiterLimit = value;
                         break;
+                    case "fill-rule":
+                        switch (value)
+                        {
+                            case "nonzero":
+                                vdPath.FillType = FillType.winding;
+                                break;
+                            case "evenodd":
+                                vdPath.FillType = FillType.even_odd;
+                                break;
+                        }
+                        break;
                 }
             }
         }
@@ -188,7 +199,11 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
             foreach (string key in style.Keys)
             {
-                result[key] = style[key];
+                var value = style[key];
+                if (value != "inherit")
+                {
+                    result[key] = value;
+                }
             }
             return result;
         }
