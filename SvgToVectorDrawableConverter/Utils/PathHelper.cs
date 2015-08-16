@@ -8,14 +8,15 @@ namespace SvgToVectorDrawableConverter.Utils
         public static string Subpath(string filePath, string directoryPath)
         {
             return filePath.Substring(directoryPath.Length)
-                .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
 
         public static string NormalizeFileName(string filePath)
         {
             var fileName = Path.GetFileNameWithoutExtension(filePath);
 
-            fileName = Regex.Replace(fileName, @"[^\w\$]", "_");
+            fileName = fileName.ToLowerInvariant();
+            fileName = Regex.Replace(fileName, "\\W", "_");
             if (char.IsDigit(fileName[0]))
             {
                 fileName = '_' + fileName;

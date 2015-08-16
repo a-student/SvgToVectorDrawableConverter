@@ -45,7 +45,7 @@ namespace SvgToVectorDrawableConverter
                     var svgDocument = SvgDocumentWrapper.CreateFromFile(tempFile);
                     File.Delete(tempFile);
 
-                    var outputDocument = SvgToVectorDocumentConverter.Convert(svgDocument).WrappedDocument;
+                    var outputDocument = SvgToVectorDocumentConverter.Convert(svgDocument, options.BlankVectorDrawablePath).WrappedDocument;
 
                     var outputFile = PathHelper.Subpath(inputFile, options.InputDirectory);
                     outputFile = Path.Combine(options.OutputDirectory, outputFile);

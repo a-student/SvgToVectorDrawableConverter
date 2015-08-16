@@ -1,17 +1,14 @@
 ﻿using System.Xml;
 using SvgToVectorDrawableConverter.DataFormat.Common;
-using SvgToVectorDrawableConverter.Utils;
 
 namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
 {
     static class VectorDocumentWrapper
     {
-        public static DocumentWrapper<Vector> CreateBlank()
+        public static DocumentWrapper<Vector> CreateFromFile(string filename)
         {
-            var blankVectorDrawablePath = System.IO.Path.Combine(App.Directory, "BlankVectorDrawable.xml");
-
             var xmlDocument = new XmlDocument();
-            xmlDocument.Load(blankVectorDrawablePath);
+            xmlDocument.Load(filename);
             return new DocumentWrapper<Vector>(xmlDocument);
         }
     }

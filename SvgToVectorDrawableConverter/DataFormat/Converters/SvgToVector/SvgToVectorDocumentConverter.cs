@@ -14,9 +14,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 {
     static class SvgToVectorDocumentConverter
     {
-        public static DocumentWrapper<Vector> Convert(DocumentWrapper<Svg> svgDocument)
+        public static DocumentWrapper<Vector> Convert(DocumentWrapper<Svg> svgDocument, string blankVectorDrawablePath)
         {
-            var vectorDocument = VectorDocumentWrapper.CreateBlank();
+            var vectorDocument = VectorDocumentWrapper.CreateFromFile(blankVectorDrawablePath);
 
             var viewBox = svgDocument.Root.ViewBox;
             if (viewBox.X != 0 || viewBox.Y != 0)

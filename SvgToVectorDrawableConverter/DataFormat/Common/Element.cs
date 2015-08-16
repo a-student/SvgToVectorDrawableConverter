@@ -7,7 +7,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
 {
     abstract class Element
     {
-        internal XmlElement WrappedElement { get; private set; }
+        internal XmlElement WrappedElement { get; }
 
         protected Element(XmlElement xmlElement)
         {
@@ -27,11 +27,17 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
 
         protected void SetAttribute<T>(T value, string prefix, T defaultValue = default(T), [CallerMemberName] string name = null)
         {
+            var namespaceUri = WrappedElement.GetNamespaceOfPrefix(prefix);
+            if (string.IsNullOrEmpty(namespaceUri))
+            {
+                return;
+            }
+
             name = FirstCharToLower(name);
-            var attribute = WrappedElement.Attributes[name];
+            var attribute = WrappedElement.Attributes[name, namespaceUri];
             if (attribute == null)
             {
-                attribute = WrappedElement.OwnerDocument.CreateAttribute(name, WrappedElement.GetNamespaceOfPrefix(prefix));
+                attribute = WrappedElement.OwnerDocument.CreateAttribute(name, namespaceUri);
                 WrappedElement.Attributes.Append(attribute);
             }
             if (!Equals(value, defaultValue))

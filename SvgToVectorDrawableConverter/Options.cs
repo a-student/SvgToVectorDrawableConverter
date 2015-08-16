@@ -57,6 +57,22 @@ namespace SvgToVectorDrawableConverter
             set { _outputDirectory = value; }
         }
 
+        private string _blankVectorDrawablePath;
+
+        [Option("blank", HelpText = "Path to the blank vector drawable XML file. By default, BlankVectorDrawable.xml in the app directory is used.")]
+        public string BlankVectorDrawablePath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_blankVectorDrawablePath))
+                {
+                    return Path.Combine(App.Directory, "BlankVectorDrawable.xml");
+                }
+                return _blankVectorDrawablePath;
+            }
+            set { _blankVectorDrawablePath = value; }
+        }
+
         private string _inkscapeAppPath;
 
         [Option("inkscape", HelpText = "Path to the Inkscape app file. Specify this if your Inkscape installation directory differs from the default.")]
