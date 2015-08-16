@@ -10,7 +10,6 @@ namespace SvgToVectorDrawableConverter
 {
     class Converter
     {
-        private readonly Options _options = new Options();
         private readonly string[] _args;
 
         public Converter(string[] args)
@@ -23,42 +22,46 @@ namespace SvgToVectorDrawableConverter
         {
             try
             {
-                if (!CommandLine.Parser.Default.ParseArguments(_args, _options))
+                var options = new Options();
+                if (CommandLine.Parser.Default.ParseArguments(_args, options))
                 {
-                    return;
-                }
-
-                foreach (var inputFile in Directory.GetFiles(_options.InputDirectory, _options.InputMask + ".svg", SearchOption.AllDirectories))
-                {
-                    try
-                    {
-                        var tempFile = Path.GetTempFileName();
-                        Inkscape.SimplifySvgSync(_options.InkscapeAppPath, inputFile, tempFile);
-                        var svgDocument = SvgDocumentWrapper.CreateFromFile(tempFile);
-                        File.Delete(tempFile);
-
-                        var outputDocument = SvgToVectorDocumentConverter.Convert(svgDocument).WrappedDocument;
-
-                        var outputFile = inputFile.Substring(_options.InputDirectory.Length)
-                            .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                        outputFile = Path.Combine(_options.OutputDirectory, outputFile);
-                        outputFile = Path.ChangeExtension(outputFile, "xml");
-
-                        Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
-                        using (var writer = new StreamWriter(outputFile, false, new UTF8Encoding(false)))
-                        {
-                            outputDocument.Save(writer);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        PrintError(string.Format("{0}: {1}", inputFile, e.Message));
-                    }
+                    Convert(options);
                 }
             }
             catch (Exception e)
             {
                 PrintError(e.ToString());
+            }
+        }
+
+        private static void Convert(Options options)
+        {
+            foreach (var inputFile in Directory.GetFiles(options.InputDirectory, options.InputMask + ".svg", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    var tempFile = Path.GetTempFileName();
+                    Inkscape.SimplifySvgSync(options.InkscapeAppPath, inputFile, tempFile);
+                    var svgDocument = SvgDocumentWrapper.CreateFromFile(tempFile);
+                    File.Delete(tempFile);
+
+                    var outputDocument = SvgToVectorDocumentConverter.Convert(svgDocument).WrappedDocument;
+
+                    var outputFile = PathHelper.Subpath(inputFile, options.InputDirectory);
+                    outputFile = Path.Combine(options.OutputDirectory, outputFile);
+                    outputFile = Path.ChangeExtension(outputFile, "xml");
+                    outputFile = PathHelper.NormalizeFileName(outputFile);
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
+                    using (var writer = new StreamWriter(outputFile, false, new UTF8Encoding(false)))
+                    {
+                        outputDocument.Save(writer);
+                    }
+                }
+                catch (Exception e)
+                {
+                    PrintError($"{PathHelper.Subpath(inputFile, options.InputDirectory)}: {e.Message}");
+                }
             }
         }
 
