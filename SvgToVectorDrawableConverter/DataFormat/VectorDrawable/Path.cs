@@ -16,6 +16,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
@@ -26,6 +27,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
@@ -36,6 +38,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
@@ -46,6 +49,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
@@ -56,6 +60,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android", 1);
                 SetAttribute(value, "auto", 1);
+                SetAttribute(value, "better", 1);
             }
         }
 
@@ -66,6 +71,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android", 1);
                 SetAttribute(value, "auto", 1);
+                SetAttribute(value, "better", 1);
             }
         }
 
@@ -75,6 +81,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
 
@@ -84,6 +91,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
 
@@ -93,6 +101,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
 
@@ -105,6 +114,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
@@ -117,6 +127,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
@@ -126,13 +137,14 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
         public FillType FillType
         {
             get { return (FillType)Enum.Parse(typeof(FillType), GetAttribute(default(FillType).ToString())); }
-            set { SetAttribute(value, "auto"); }
+            set { SetAttribute(value, "better"); }
         }
     }
 }

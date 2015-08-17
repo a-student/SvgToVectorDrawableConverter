@@ -57,21 +57,10 @@ namespace SvgToVectorDrawableConverter
             set { _outputDirectory = value; }
         }
 
-        private string _blankVectorDrawablePath;
+        [Option("lib", HelpText = "Library name for which to create vector drawable files. Do not specify if you want to convert for Android 5.0+")]
+        public string Lib { private get; set; }
 
-        [Option("blank", HelpText = "Path to the blank vector drawable XML file. By default, BlankVectorDrawable.xml in the app directory is used.")]
-        public string BlankVectorDrawablePath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_blankVectorDrawablePath))
-                {
-                    return Path.Combine(App.Directory, "BlankVectorDrawable.xml");
-                }
-                return _blankVectorDrawablePath;
-            }
-            set { _blankVectorDrawablePath = value; }
-        }
+        public string BlankVectorDrawablePath => Path.Combine(App.Directory, $"BlankVectorDrawable{(string.IsNullOrEmpty(Lib) ? "" : "." + Lib)}.xml");
 
         private string _inkscapeAppPath;
 
@@ -97,7 +86,7 @@ namespace SvgToVectorDrawableConverter
         {
             var helpText = new HelpText { AddDashesToOption = true };
             HelpText.DefaultParsingErrorsHandler(this, helpText);
-            helpText.AddPreOptionsLine($"Usage: {App.ExeName} -i <input file mask> [-o <output directory>] [--inkscape <inkscape app path>]");
+            helpText.AddPreOptionsLine($"Usage: {App.ExeName} -i <input file mask> [-o <output directory>] [--lib <lib name>] [--inkscape <inkscape app path>]");
             helpText.AddOptions(this);
             helpText.AddPostOptionsLine(GetGithub());
             return helpText;

@@ -16,6 +16,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
@@ -25,6 +26,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(value, "android");
                 SetAttribute(value, "auto");
+                SetAttribute(value, "better");
             }
         }
 
@@ -34,6 +36,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
 
@@ -43,6 +46,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
     }

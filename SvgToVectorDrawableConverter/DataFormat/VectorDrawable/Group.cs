@@ -17,6 +17,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
 
@@ -27,6 +28,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
 
@@ -37,6 +39,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
 
@@ -47,6 +50,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android", 1);
                 SetAttribute(Convert.ToSingle(value), "auto", 1);
+                SetAttribute(Convert.ToSingle(value), "better", 1);
             }
         }
 
@@ -57,6 +61,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android", 1);
                 SetAttribute(Convert.ToSingle(value), "auto", 1);
+                SetAttribute(Convert.ToSingle(value), "better", 1);
             }
         }
 
@@ -67,6 +72,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
 
@@ -77,6 +83,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             {
                 SetAttribute(Convert.ToSingle(value), "android");
                 SetAttribute(Convert.ToSingle(value), "auto");
+                SetAttribute(Convert.ToSingle(value), "better");
             }
         }
     }
