@@ -11,7 +11,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
             : base(wrappedElement)
         { }
 
-        public StringDictionary Style => Parser.ParseStyle(GetAttribute<string>());
+        public StringDictionary Style => Styler.GetStyle(this);
 
         public string Width => GetAttribute<string>();
 

@@ -7,9 +7,40 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
     {
         public static void Optimize(Vector root)
         {
+            ResetIneffectiveAttributesRecursively(root.Children);
             RemoveInvisiblePaths(root.Children);
             RemoveEmptyGroups(root.Children);
             EliminateUselessGroupNesting(root.Children);
+        }
+
+        private static void ResetIneffectiveAttributesRecursively(ElementCollection elements)
+        {
+            foreach (var element in elements)
+            {
+                if (element is ElementWithChildren)
+                {
+                    ResetIneffectiveAttributesRecursively(((ElementWithChildren)element).Children);
+                }
+                else if (element is Path)
+                {
+                    ResetIneffectiveAttributes((Path)element);
+                }
+            }
+        }
+
+        private static void ResetIneffectiveAttributes(Path path)
+        {
+            if (string.IsNullOrEmpty(path.FillColor) || path.FillAlpha == 0)
+            {
+                path.FillColor = null;
+                path.FillAlpha = 1;
+            }
+            if (string.IsNullOrEmpty(path.StrokeColor) || path.StrokeAlpha == 0 || path.StrokeWidth == 0)
+            {
+                path.StrokeColor = null;
+                path.StrokeAlpha = 1;
+                path.StrokeWidth = 0;
+            }
         }
 
         private static void RemoveInvisiblePaths(ElementCollection elements)

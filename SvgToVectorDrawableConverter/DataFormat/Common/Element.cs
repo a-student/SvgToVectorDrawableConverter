@@ -14,7 +14,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
             WrappedElement = xmlElement;
         }
 
-        protected T GetAttribute<T>(T defaultValue = default(T), [CallerMemberName] string name = null)
+        protected internal T GetAttribute<T>(T defaultValue = default(T), [CallerMemberName] string name = null)
         {
             name = FirstCharToLower(name);
             var attribute = WrappedElement.Attributes[name];

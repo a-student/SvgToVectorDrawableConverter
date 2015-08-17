@@ -10,14 +10,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
             : base(wrappedElement)
         { }
 
-        public StringDictionary Style
-        {
-            get { return Parser.ParseStyle(GetAttribute<string>()); }
-        }
+        public StringDictionary Style => Styler.GetStyle(this);
 
-        public Transform Transform
-        {
-            get { return Parser.ParseTransform(GetAttribute<string>()); }
-        }
+        public Transform Transform => Parser.ParseTransform(GetAttribute<string>());
     }
 }

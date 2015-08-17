@@ -64,6 +64,8 @@
     <Compile Include="DataFormat\ScalableVectorGraphics\Metadata.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Parser.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Path.cs" />
+    <Compile Include="DataFormat\Converters\SvgToVector\StyleHelper.cs" />
+    <Compile Include="DataFormat\ScalableVectorGraphics\Styler.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Svg.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\SvgDocumentWrapper.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Title.cs" />

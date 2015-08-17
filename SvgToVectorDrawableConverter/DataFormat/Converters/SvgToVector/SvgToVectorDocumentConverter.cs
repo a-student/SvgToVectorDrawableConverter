@@ -59,15 +59,17 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             vectorDocument.Root.Width = ConvertToDp(svgDocument.Root.Width, viewBox.Width);
             vectorDocument.Root.Height = ConvertToDp(svgDocument.Root.Height, viewBox.Height);
 
+            var style = StyleHelper.MergeStyles(StyleHelper.InitialStyles, svgDocument.Root.Style);
+
             foreach (var child in svgDocument.Root.Children)
             {
                 if (child is G)
                 {
-                    InitRecursively(vectorDocument.Root.Children.Append<Group>(), (G)child, svgDocument.Root.Style);
+                    InitRecursively(vectorDocument.Root.Children.Append<Group>(), (G)child, style);
                 }
                 if (child is SvgPath)
                 {
-                    Init(vectorDocument.Root.Children.Append<Group>(), (SvgPath)child, svgDocument.Root.Style);
+                    Init(vectorDocument.Root.Children.Append<Group>(), (SvgPath)child, style);
                 }
             }
 
@@ -111,7 +113,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             Init(group, g.Transform);
 
-            var style = MergeStyles(parentStyle, g.Style);
+            var style = StyleHelper.MergeStyles(parentStyle, g.Style);
 
             foreach (var child in g.Children)
             {
@@ -137,7 +139,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
             vdPath.PathData = PathDataFixer.Fix(svgPath.D);
 
-            var style = MergeStyles(parentStyle, svgPath.Style);
+            var style = StyleHelper.MergeStyles(parentStyle, svgPath.Style);
             foreach (string key in style.Keys)
             {
                 var value = style[key];
@@ -227,24 +229,6 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 group.PivotX = rotate.Cx;
                 group.PivotY = rotate.Cy;
             }
-        }
-
-        private static StringDictionary MergeStyles(StringDictionary parentStyle, StringDictionary style)
-        {
-            var result = new StringDictionary();
-            foreach (string key in parentStyle.Keys)
-            {
-                result[key] = parentStyle[key];
-            }
-            foreach (string key in style.Keys)
-            {
-                var value = style[key];
-                if (value != "inherit")
-                {
-                    result[key] = value;
-                }
-            }
-            return result;
         }
     }
 }
