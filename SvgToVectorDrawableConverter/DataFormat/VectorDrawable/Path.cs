@@ -131,10 +131,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
 
         public FillType FillType
         {
-            set
-            {
-                SetAttribute(value, "auto");
-            }
+            get { return (FillType)Enum.Parse(typeof(FillType), GetAttribute(default(FillType).ToString())); }
+            set { SetAttribute(value, "auto"); }
         }
     }
 }

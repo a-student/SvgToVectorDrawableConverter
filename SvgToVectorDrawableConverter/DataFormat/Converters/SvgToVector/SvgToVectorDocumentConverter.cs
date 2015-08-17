@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -12,11 +13,40 @@ using SvgPath = SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics.P
 
 namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 {
-    static class SvgToVectorDocumentConverter
+    class SvgToVectorDocumentConverter
     {
-        public static DocumentWrapper<Vector> Convert(DocumentWrapper<Svg> svgDocument, string blankVectorDrawablePath)
+        private readonly string _blankVectorDrawablePath;
+
+        public SvgToVectorDocumentConverter(string blankVectorDrawablePath)
         {
-            var vectorDocument = VectorDocumentWrapper.CreateFromFile(blankVectorDrawablePath);
+            _blankVectorDrawablePath = blankVectorDrawablePath;
+        }
+
+        private bool _isFillRuleSupported;
+
+        private void Reset()
+        {
+            _isFillRuleSupported = true;
+        }
+
+        public IList<string> Warnings
+        {
+            get
+            {
+                var warnings = new List<string>();
+                if (!_isFillRuleSupported)
+                {
+                    warnings.Add("SVG fill-rule is not properly supported on Android. Please, read https://github.com/a-student/SvgToVectorDrawableConverter#not-supported-svg-features");
+                }
+                return warnings.AsReadOnly();
+            }
+        }
+
+        public DocumentWrapper<Vector> Convert(DocumentWrapper<Svg> svgDocument)
+        {
+            Reset();
+
+            var vectorDocument = VectorDocumentWrapper.CreateFromFile(_blankVectorDrawablePath);
 
             var viewBox = svgDocument.Root.ViewBox;
             if (viewBox.X != 0 || viewBox.Y != 0)
@@ -77,7 +107,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             return format(value / 2);
         }
 
-        private static void InitRecursively(Group group, G g, StringDictionary parentStyle)
+        private void InitRecursively(Group group, G g, StringDictionary parentStyle)
         {
             Init(group, g.Transform);
 
@@ -95,11 +125,11 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                     Init(group.Children.Append<Group>(), (SvgPath)child, style);
                     continue;
                 }
-                throw new UnsupportedFormatException(string.Format("Met unallowed element '{0}'.", child));
+                throw new UnsupportedFormatException($"Met unallowed element '{child}'.");
             }
         }
 
-        private static void Init(Group group, SvgPath svgPath, StringDictionary parentStyle)
+        private void Init(Group group, SvgPath svgPath, StringDictionary parentStyle)
         {
             Init(group, svgPath.Transform);
 
@@ -144,14 +174,23 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                         vdPath.StrokeMiterLimit = value;
                         break;
                     case "fill-rule":
+                        FillType? fillType = null;
                         switch (value)
                         {
                             case "nonzero":
-                                vdPath.FillType = FillType.winding;
+                                fillType = FillType.winding;
                                 break;
                             case "evenodd":
-                                vdPath.FillType = FillType.even_odd;
+                                fillType = FillType.even_odd;
                                 break;
+                        }
+                        if (fillType.HasValue)
+                        {
+                            vdPath.FillType = fillType.Value;
+                            if (vdPath.FillType != fillType.Value)
+                            {
+                                _isFillRuleSupported = false;
+                            }
                         }
                         break;
                 }

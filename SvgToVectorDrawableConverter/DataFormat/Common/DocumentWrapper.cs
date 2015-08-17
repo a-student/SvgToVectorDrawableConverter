@@ -5,8 +5,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
     class DocumentWrapper<T>
         where T : Element
     {
-        public XmlDocument WrappedDocument { get; private set; }
-        public T Root { get; private set; }
+        public XmlDocument WrappedDocument { get; }
+        public T Root { get; }
 
         internal DocumentWrapper(XmlDocument xmlDocument)
         {

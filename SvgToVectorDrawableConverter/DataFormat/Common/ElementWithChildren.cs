@@ -10,6 +10,6 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
             Children = new ElementCollection(wrappedElement);
         }
 
-        public ElementCollection Children { get; private set; }
+        public ElementCollection Children { get; }
     }
 }

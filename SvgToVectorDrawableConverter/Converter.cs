@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -37,8 +38,12 @@ namespace SvgToVectorDrawableConverter
 
         private static void Convert(Options options)
         {
+            var converter = new SvgToVectorDocumentConverter(options.BlankVectorDrawablePath);
+
             foreach (var inputFile in Directory.GetFiles(options.InputDirectory, options.InputMask + ".svg", SearchOption.AllDirectories))
             {
+                var subpath = PathHelper.Subpath(inputFile, options.InputDirectory);
+
                 try
                 {
                     var tempFile = Path.GetTempFileName();
@@ -46,10 +51,10 @@ namespace SvgToVectorDrawableConverter
                     var svgDocument = SvgDocumentWrapper.CreateFromFile(tempFile);
                     File.Delete(tempFile);
 
-                    var outputDocument = SvgToVectorDocumentConverter.Convert(svgDocument, options.BlankVectorDrawablePath).WrappedDocument;
+                    var outputDocument = converter.Convert(svgDocument).WrappedDocument;
+                    PrintWarnings(subpath, converter.Warnings);
 
-                    var outputFile = PathHelper.Subpath(inputFile, options.InputDirectory);
-                    outputFile = Path.Combine(options.OutputDirectory, outputFile);
+                    var outputFile = Path.Combine(options.OutputDirectory, subpath);
                     outputFile = Path.ChangeExtension(outputFile, "xml");
                     outputFile = PathHelper.NormalizeFileName(outputFile);
 
@@ -68,8 +73,23 @@ namespace SvgToVectorDrawableConverter
                 }
                 catch (Exception e)
                 {
-                    PrintError($"{PathHelper.Subpath(inputFile, options.InputDirectory)}: {e.Message}");
+                    PrintError($"{subpath}: {e.Message}");
                 }
+            }
+        }
+
+        private static void PrintWarnings(string subpath, ICollection<string> warnings)
+        {
+            if (warnings.Count == 0)
+            {
+                return;
+            }
+            var writer = Console.Out;
+            writer.WriteLine();
+            writer.Write($"[Warning(s)] {subpath}: ");
+            foreach (var warning in warnings)
+            {
+                writer.WriteLine(warning);
             }
         }
 
@@ -77,7 +97,7 @@ namespace SvgToVectorDrawableConverter
         {
             var writer = Console.Error;
             writer.WriteLine();
-            writer.WriteLine(message);
+            writer.WriteLine("[Error] " + message);
         }
     }
 }
