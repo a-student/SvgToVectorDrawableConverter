@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Xml;
 using SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector;
 using SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics;
 using SvgToVectorDrawableConverter.Utils;
@@ -53,7 +54,14 @@ namespace SvgToVectorDrawableConverter
                     outputFile = PathHelper.NormalizeFileName(outputFile);
 
                     Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
-                    using (var writer = new StreamWriter(outputFile, false, new UTF8Encoding(false)))
+                    var settings = new XmlWriterSettings
+                    {
+                        Encoding = new UTF8Encoding(false),
+                        Indent = true,
+                        IndentChars = new string(' ', 4),
+                        NewLineOnAttributes = true
+                    };
+                    using (var writer = XmlWriter.Create(outputFile, settings))
                     {
                         outputDocument.Save(writer);
                     }
