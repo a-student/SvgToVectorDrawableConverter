@@ -84,29 +84,29 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
             if (dimension.EndsWith("in"))
             {
-                return format(value * 45);
+                return format(value * 90);
             }
             if (dimension.EndsWith("cm"))
             {
-                return format(value * 17.7);
+                return format(value * 35.43307);
             }
             if (dimension.EndsWith("mm"))
             {
-                return format(value * 1.77);
+                return format(value * 3.543307);
             }
             if (dimension.EndsWith("pt"))
             {
-                return format(value * 0.625);
+                return format(value * 1.25);
             }
             if (dimension.EndsWith("pc"))
             {
-                return format(value * 7.5);
+                return format(value * 15);
             }
             if (dimension.EndsWith("%"))
             {
-                return format(viewBox * value / 200);
+                return format(viewBox * value / 100);
             }
-            return format(value / 2);
+            return format(value);
         }
 
         private void InitRecursively(Group group, G g, StringDictionary parentStyle)

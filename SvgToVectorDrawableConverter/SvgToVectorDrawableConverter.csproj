@@ -97,7 +97,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="BlankVectorDrawable.ResAuto.xml">
+    <None Include="BlankVectorDrawable.res-auto.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
