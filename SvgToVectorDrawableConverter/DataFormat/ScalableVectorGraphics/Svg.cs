@@ -5,7 +5,7 @@ using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
 {
-    class Svg : ElementWithChildren
+    class Svg : ElementWithChildren, IStyleableElement
     {
         public Svg(XmlElement wrappedElement)
             : base(wrappedElement)

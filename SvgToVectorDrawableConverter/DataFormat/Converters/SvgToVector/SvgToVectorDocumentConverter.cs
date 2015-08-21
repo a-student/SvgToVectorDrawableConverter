@@ -63,14 +63,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
             foreach (var child in svgDocument.Root.Children)
             {
-                if (child is G)
-                {
-                    InitRecursively(vectorDocument.Root.Children.Append<Group>(), (G)child, style);
-                }
-                if (child is SvgPath)
-                {
-                    Init(vectorDocument.Root.Children.Append<Group>(), (SvgPath)child, style);
-                }
+                AppendTo(vectorDocument.Root.Children, child, style);
             }
 
             VectorOptimizer.Optimize(vectorDocument.Root);
@@ -117,18 +110,30 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
             foreach (var child in g.Children)
             {
-                if (child is G)
+                if (!AppendTo(group.Children, child, style))
                 {
-                    InitRecursively(group.Children.Append<Group>(), (G)child, style);
-                    continue;
+                    throw new UnsupportedFormatException($"Met unallowed element '{child}'.");
                 }
-                if (child is SvgPath)
-                {
-                    Init(group.Children.Append<Group>(), (SvgPath)child, style);
-                    continue;
-                }
-                throw new UnsupportedFormatException($"Met unallowed element '{child}'.");
             }
+        }
+
+        private bool AppendTo(ElementCollection elements, Element child, StringDictionary parentStyle)
+        {
+            if (child is IStyleableElement && !IsDisplayed((IStyleableElement)child))
+            {
+                return true;
+            }
+            if (child is G)
+            {
+                InitRecursively(elements.Append<Group>(), (G)child, parentStyle);
+                return true;
+            }
+            if (child is SvgPath)
+            {
+                Init(elements.Append<Group>(), (SvgPath)child, parentStyle);
+                return true;
+            }
+            return false;
         }
 
         private void Init(Group group, SvgPath svgPath, StringDictionary parentStyle)
@@ -229,6 +234,11 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 group.PivotX = rotate.Cx;
                 group.PivotY = rotate.Cy;
             }
+        }
+
+        private static bool IsDisplayed(IStyleableElement element)
+        {
+            return element.Style["display"] != "none";
         }
     }
 }
