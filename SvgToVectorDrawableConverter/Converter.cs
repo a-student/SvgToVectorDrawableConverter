@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector;
 using SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics;
+using SvgToVectorDrawableConverter.DataFormat.Utils;
 using SvgToVectorDrawableConverter.Utils;
 using Path = System.IO.Path;
 
@@ -47,7 +48,9 @@ namespace SvgToVectorDrawableConverter
                 try
                 {
                     var tempFile = Path.GetTempFileName();
-                    Inkscape.SimplifySvgSync(options.InkscapeAppPath, inputFile, tempFile);
+                    File.Copy(inputFile, tempFile, true);
+                    SvgUseElementInliner.InlineUses(tempFile);
+                    Inkscape.SimplifySvgSync(options.InkscapeAppPath, tempFile, tempFile);
                     var svgDocument = SvgDocumentWrapper.CreateFromFile(tempFile);
                     File.Delete(tempFile);
 
