@@ -64,6 +64,10 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
         private static bool IsPathVisible(Path path)
         {
+            if (string.IsNullOrEmpty(path.PathData))
+            {
+                return false;
+            }
             if (!string.IsNullOrEmpty(path.FillColor) && path.FillAlpha > 0)
             {
                 return true;

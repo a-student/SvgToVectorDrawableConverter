@@ -12,6 +12,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
 
         public string PathData
         {
+            get { return GetAttribute<string>(); }
             set
             {
                 SetAttribute(value, "android");

@@ -16,8 +16,12 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             const char moveToUpper = 'M';
 
-            pathData = pathData.Trim();
-            if (pathData.Length == 0 || char.ToUpper(pathData[0]) != moveToUpper)
+            pathData = pathData?.Trim();
+            if (string.IsNullOrEmpty(pathData))
+            {
+                return pathData;
+            }
+            if (char.ToUpper(pathData[0]) != moveToUpper)
             {
                 throw new UnsupportedFormatException("Path data must begin with a moveto command.");
             }
