@@ -59,12 +59,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             vectorDocument.Root.Width = ConvertToDp(svgDocument.Root.Width, viewBox.Width);
             vectorDocument.Root.Height = ConvertToDp(svgDocument.Root.Height, viewBox.Height);
 
-            var style = StyleHelper.MergeStyles(StyleHelper.InitialStyles, svgDocument.Root.Style);
-
-            foreach (var child in svgDocument.Root.Children)
-            {
-                AppendTo(vectorDocument.Root.Children, child, style);
-            }
+            AppendAll(vectorDocument.Root.Children, svgDocument.Root.Children, StyleHelper.MergeStyles(StyleHelper.InitialStyles, svgDocument.Root.Style));
 
             VectorOptimizer.Optimize(vectorDocument.Root);
             return vectorDocument;
@@ -72,8 +67,14 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
         private static string ConvertToDp(string dimension, double viewBox)
         {
-            var value = double.Parse(Regex.Replace(dimension, "[^0-9.]", ""), CultureInfo.InvariantCulture);
             Func<double, string> format = x => string.Format(CultureInfo.InvariantCulture, "{0}dp", x);
+
+            if (string.IsNullOrEmpty(dimension))
+            {
+                return format(viewBox);
+            }
+
+            var value = double.Parse(Regex.Replace(dimension, "[^0-9.]", ""), CultureInfo.InvariantCulture);
 
             if (dimension.EndsWith("in"))
             {
@@ -106,34 +107,33 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             Init(group, g.Transform);
 
-            var style = StyleHelper.MergeStyles(parentStyle, g.Style);
-
-            foreach (var child in g.Children)
-            {
-                if (!AppendTo(group.Children, child, style))
-                {
-                    throw new UnsupportedFormatException($"Met unallowed element '{child}'.");
-                }
-            }
+            AppendAll(group.Children, g.Children, StyleHelper.MergeStyles(parentStyle, g.Style));
         }
 
-        private bool AppendTo(ElementCollection elements, Element child, StringDictionary parentStyle)
+        private void AppendAll(ElementCollection elements, ElementCollection children, StringDictionary parentStyle)
         {
-            if (child is IStyleableElement && !IsDisplayed((IStyleableElement)child))
+            foreach (var child in children)
             {
-                return true;
+                if (child is IStyleableElement && !IsDisplayed((IStyleableElement)child))
+                {
+                    continue;
+                }
+                if (child is G)
+                {
+                    InitRecursively(elements.Append<Group>(), (G)child, parentStyle);
+                    continue;
+                }
+                if (child is SvgPath)
+                {
+                    Init(elements.Append<Group>(), (SvgPath)child, parentStyle);
+                    continue;
+                }
+                if (child is Metadata || child is Title || child is Desc || child is Defs)
+                {
+                    continue;
+                }
+                throw new UnsupportedFormatException($"Met unallowed element '{child}'.");
             }
-            if (child is G)
-            {
-                InitRecursively(elements.Append<Group>(), (G)child, parentStyle);
-                return true;
-            }
-            if (child is SvgPath)
-            {
-                Init(elements.Append<Group>(), (SvgPath)child, parentStyle);
-                return true;
-            }
-            return false;
         }
 
         private void Init(Group group, SvgPath svgPath, StringDictionary parentStyle)
