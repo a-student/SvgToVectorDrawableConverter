@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
 {
     class Group : ElementWithChildren
     {
-        public Group(XmlElement wrappedElement)
-        : base(wrappedElement)
+        public Group([NotNull] XmlElement wrappedElement)
+            : base(wrappedElement)
         { }
 
         public double Rotation

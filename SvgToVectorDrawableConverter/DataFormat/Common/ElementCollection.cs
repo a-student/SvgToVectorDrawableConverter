@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using JetBrains.Annotations;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Common
 {
@@ -9,25 +10,16 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
     {
         private readonly XmlElement _xmlElement;
 
-        public ElementCollection(XmlElement xmlElement)
+        public ElementCollection([NotNull] XmlElement xmlElement)
         {
             _xmlElement = xmlElement;
         }
 
-        private IEnumerable<XmlElement> ChildElements
-        {
-            get { return _xmlElement.ChildNodes.OfType<XmlElement>(); }
-        }
+        private IEnumerable<XmlElement> ChildElements => _xmlElement.ChildNodes.OfType<XmlElement>();
 
-        public int Count
-        {
-            get { return ChildElements.Count(); }
-        }
+        public int Count => ChildElements.Count();
 
-        public Element this[int index]
-        {
-            get { return ElementFactory.Wrap(ChildElements.ElementAt(index)); }
-        }
+        public Element this[int index] => ElementFactory.Wrap(ChildElements.ElementAt(index));
 
         public void RemoveAt(int index)
         {

@@ -1,11 +1,12 @@
-﻿using SvgToVectorDrawableConverter.DataFormat.Common;
+﻿using JetBrains.Annotations;
+using SvgToVectorDrawableConverter.DataFormat.Common;
 using SvgToVectorDrawableConverter.DataFormat.VectorDrawable;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 {
     internal static class VectorOptimizer
     {
-        public static void Optimize(Vector root)
+        public static void Optimize([NotNull] Vector root)
         {
             ResetIneffectiveAttributesRecursively(root.Children);
             RemoveInvisiblePaths(root.Children);

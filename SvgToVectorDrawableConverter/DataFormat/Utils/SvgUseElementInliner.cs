@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 // ReSharper disable PossibleNullReferenceException
 
@@ -7,7 +8,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Utils
 {
     static class SvgUseElementInliner
     {
-        public static void InlineUses(string filename)
+        public static void InlineUses([NotNull] string filename)
         {
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(filename);

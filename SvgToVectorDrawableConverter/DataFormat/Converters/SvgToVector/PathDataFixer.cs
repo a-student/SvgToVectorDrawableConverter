@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
@@ -12,7 +13,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         /// Android does not understand implicit lineto command -
         /// make it explicit and capitalize the first 'm' command.
         /// </summary>
-        public static string Fix(string pathData)
+        [CanBeNull]
+        public static string Fix([CanBeNull] string pathData)
         {
             const char moveToUpper = 'M';
 

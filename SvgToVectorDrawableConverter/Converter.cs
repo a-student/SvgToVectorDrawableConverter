@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector;
 using SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics;
 using SvgToVectorDrawableConverter.DataFormat.Utils;
@@ -15,7 +16,7 @@ namespace SvgToVectorDrawableConverter
     {
         private readonly string[] _args;
 
-        public Converter(string[] args)
+        public Converter([NotNull] string[] args)
         {
             _args = new string[args.Length];
             args.CopyTo(_args, 0);

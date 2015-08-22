@@ -1,9 +1,11 @@
 ﻿using System.Collections.Specialized;
+using JetBrains.Annotations;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 {
     internal static class StyleHelper
     {
+        [NotNull]
         public static readonly StringDictionary InitialStyles = new StringDictionary
         {
             { "fill", "#000000" },
@@ -11,7 +13,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             { "fill-rule", "nonzero" }
         };
 
-        public static StringDictionary MergeStyles(StringDictionary parentStyle, StringDictionary style)
+        [NotNull]
+        public static StringDictionary MergeStyles([NotNull] StringDictionary parentStyle, [NotNull] StringDictionary style)
         {
             var result = new StringDictionary();
             foreach (string key in parentStyle.Keys)

@@ -1,12 +1,14 @@
 ﻿using System.Collections.Specialized;
 using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
 {
     internal static class Styler
     {
-        public static StringDictionary GetStyle(Element element)
+        [NotNull]
+        public static StringDictionary GetStyle([NotNull] Element element)
         {
             const string styleAttributeName = "style";
 

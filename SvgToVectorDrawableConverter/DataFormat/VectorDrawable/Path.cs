@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
 {
     class Path : Element
     {
-        public Path(XmlElement wrappedElement)
-        : base(wrappedElement)
+        public Path([NotNull] XmlElement wrappedElement)
+            : base(wrappedElement)
         { }
 
         public string PathData

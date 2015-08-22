@@ -23,7 +23,7 @@ namespace SvgToVectorDrawableConverter.Utils
         {
             if (!File.Exists(appPath))
             {
-                throw new ApplicationException(string.Format("Inkscape app was not found in the path '{0}'. Please download it from https://inkscape.org/en/download and install it on your system.", appPath));
+                throw new ApplicationException($"Inkscape app was not found in the path '{appPath}'. Please download it from https://inkscape.org/en/download and install it on your system.");
             }
 
             var arguments = $"\"{inputPath}\" -T -l \"{outputPath}\"";

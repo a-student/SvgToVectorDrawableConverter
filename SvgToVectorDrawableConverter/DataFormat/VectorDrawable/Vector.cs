@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
 {
     class Vector : ElementWithChildren
     {
-        public Vector(XmlElement wrappedElement)
-        : base(wrappedElement)
+        public Vector([NotNull] XmlElement wrappedElement)
+            : base(wrappedElement)
         { }
 
         public string Width

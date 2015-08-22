@@ -2,14 +2,16 @@
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Xml;
+using JetBrains.Annotations;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Common
 {
     abstract class Element
     {
+        [NotNull]
         internal XmlElement WrappedElement { get; }
 
-        protected Element(XmlElement xmlElement)
+        protected Element([NotNull] XmlElement xmlElement)
         {
             WrappedElement = xmlElement;
         }
@@ -25,7 +27,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
             return (T)Convert.ChangeType(attribute.Value, typeof(T), CultureInfo.InvariantCulture);
         }
 
-        protected void SetAttribute<T>(T value, string prefix, T defaultValue = default(T), [CallerMemberName] string name = null)
+        protected void SetAttribute<T>(T value, [NotNull] string prefix, T defaultValue = default(T), [CallerMemberName] string name = null)
         {
             var namespaceUri = WrappedElement.GetNamespaceOfPrefix(prefix);
             if (string.IsNullOrEmpty(namespaceUri))

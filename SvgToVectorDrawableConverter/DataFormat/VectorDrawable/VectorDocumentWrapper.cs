@@ -1,11 +1,13 @@
 ﻿using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
 {
     static class VectorDocumentWrapper
     {
-        public static DocumentWrapper<Vector> CreateFromFile(string filename)
+        [NotNull]
+        public static DocumentWrapper<Vector> CreateFromFile([NotNull] string filename)
         {
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(filename);

@@ -1,11 +1,12 @@
 ﻿using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
 {
     class Desc : Element
     {
-        public Desc(XmlElement wrappedElement)
+        public Desc([NotNull] XmlElement wrappedElement)
             : base(wrappedElement)
         { }
     }

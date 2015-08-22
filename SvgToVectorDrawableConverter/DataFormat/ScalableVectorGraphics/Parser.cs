@@ -4,13 +4,14 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
 {
     internal static class Parser
     {
-        public static Rect ParseViewBox(string source)
+        public static Rect ParseViewBox([NotNull] string source)
         {
             // do not use Rect.Parse() - it is not implemented in Mono
             var split = source.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -22,7 +23,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
             );
         }
 
-        public static StringDictionary ParseStyle(string source)
+        [NotNull]
+        public static StringDictionary ParseStyle([CanBeNull] string source)
         {
             var result = new StringDictionary();
             if (source != null)
@@ -36,7 +38,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
             return result;
         }
 
-        public static Transform ParseTransform(string source)
+        [CanBeNull]
+        public static Transform ParseTransform([CanBeNull] string source)
         {
             if (source == null)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 using SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics;
@@ -15,9 +16,10 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 {
     class SvgToVectorDocumentConverter
     {
+        [NotNull]
         private readonly string _blankVectorDrawablePath;
 
-        public SvgToVectorDocumentConverter(string blankVectorDrawablePath)
+        public SvgToVectorDocumentConverter([NotNull] string blankVectorDrawablePath)
         {
             _blankVectorDrawablePath = blankVectorDrawablePath;
         }
@@ -29,6 +31,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             _isFillRuleSupported = true;
         }
 
+        [NotNull]
         public IList<string> Warnings
         {
             get
@@ -42,7 +45,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
         }
 
-        public DocumentWrapper<Vector> Convert(DocumentWrapper<Svg> svgDocument)
+        [NotNull]
+        public DocumentWrapper<Vector> Convert([NotNull] DocumentWrapper<Svg> svgDocument)
         {
             Reset();
 

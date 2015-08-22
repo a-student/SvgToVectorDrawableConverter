@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Common
@@ -12,7 +13,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
             return elementType.Name.ToLower();
         }
 
-        public static T Create<T>(XmlDocument xmlDocument, out XmlElement xmlElement)
+        [NotNull]
+        public static T Create<T>([NotNull] XmlDocument xmlDocument, [NotNull] out XmlElement xmlElement)
             where T : Element
         {
             xmlElement = xmlDocument.CreateElement(GetXmlName(typeof(T)));
@@ -27,7 +29,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
             .Where(x => x.GetConstructor(new[] { typeof(XmlElement) }) != null)
             .ToArray();
 
-        public static Element Wrap(XmlElement xmlElement)
+        [NotNull]
+        public static Element Wrap([NotNull] XmlElement xmlElement)
         {
             try
             {
@@ -40,7 +43,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
             }
             catch (InvalidOperationException e)
             {
-                throw new UnsupportedFormatException(string.Format("Element '{0}' is not supported.", xmlElement.Name), e);
+                throw new UnsupportedFormatException($"Element '{xmlElement.Name}' is not supported.", e);
             }
         }
     }

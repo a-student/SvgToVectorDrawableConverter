@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Exceptions
 {
@@ -7,11 +8,11 @@ namespace SvgToVectorDrawableConverter.DataFormat.Exceptions
         public UnsupportedFormatException()
         { }
 
-        public UnsupportedFormatException(String message)
+        public UnsupportedFormatException([CanBeNull] string message)
             : base(message)
         { }
 
-        public UnsupportedFormatException(String message, Exception innerException)
+        public UnsupportedFormatException([CanBeNull] string message, [CanBeNull] Exception innerException)
             : base(message, innerException)
         { }
     }

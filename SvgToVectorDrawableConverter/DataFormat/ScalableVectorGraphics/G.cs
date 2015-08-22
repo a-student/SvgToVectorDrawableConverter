@@ -1,12 +1,13 @@
 ﻿using System.Collections.Specialized;
 using System.Xml;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
 {
     class G : ElementWithChildren, IStyleableElement
     {
-        public G(XmlElement wrappedElement)
+        public G([NotNull] XmlElement wrappedElement)
             : base(wrappedElement)
         { }
 
