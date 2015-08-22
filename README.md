@@ -6,7 +6,8 @@ Put the output XML files into the ‘res/drawable’ directory of your app and r
 ## Requirements
 Inkscape (free and open-source vector graphics software) must be installed. Download it from https://inkscape.org/en/download
 
-The converter can be downloaded from https://github.com/a-student/SvgToVectorDrawableConverter/releases
+The converter can be downloaded
+[here ![releases](https://img.shields.io/github/release/a-student/SvgToVectorDrawableConverter.svg)](https://github.com/a-student/SvgToVectorDrawableConverter/releases)
 
 ## Running on Windows
 .NET Framework 4.5 or higher is required. Usually it is already installed on your operating system (enabled by default in Windows 8).
@@ -57,7 +58,7 @@ If you are using Sketch, select the path, right to the *Fills* property title th
 To reverse the path direction apply *Layer* → *Paths* → *Reverse Order* command from the main menu.
 
 ### BetterVectorDrawable library
-This library gives you ability to use vector drawables on Android 4.0+ https://github.com/a-student/BetterVectorDrawable
+[This library](https://github.com/a-student/BetterVectorDrawable) gives you ability to use vector drawables on Android 4.0+
 
 BetterVectorDrawable supports **fillType** attribute in the vector drawable XML (analogue of SVG’s fill-rule).
 To produce vector drawables for this lib, append to the converter command the `--lib BetterVectorDrawable` argument like
