@@ -5,6 +5,11 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvgToVectorDrawableConverter", "SvgToVectorDrawableConverter\SvgToVectorDrawableConverter.csproj", "{065B2607-256B-4F86-8367-7197F6F5EA3B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{186FF282-D80F-4412-8739-1A8CABC6FF79}"
+	ProjectSection(SolutionItems) = preProject
+		ILMerge.CSharp.targets = ILMerge.CSharp.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
