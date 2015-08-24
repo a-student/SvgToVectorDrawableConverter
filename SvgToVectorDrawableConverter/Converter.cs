@@ -48,8 +48,9 @@ namespace SvgToVectorDrawableConverter
 
                 try
                 {
-                    var tempFile = Path.GetTempFileName();
-                    File.Copy(inputFile, tempFile, true);
+                    var tempFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                    tempFile = Path.ChangeExtension(tempFile, "svg");
+                    File.Copy(inputFile, tempFile);
                     SvgUseElementInliner.InlineUses(tempFile);
                     Inkscape.SimplifySvgSync(options.InkscapeAppPath, tempFile, tempFile);
                     var svgDocument = SvgDocumentWrapper.CreateFromFile(tempFile);
