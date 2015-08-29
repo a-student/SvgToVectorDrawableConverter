@@ -44,6 +44,8 @@ namespace SvgToVectorDrawableConverter
 
             foreach (var inputFile in Directory.GetFiles(options.InputDirectory, options.InputMask + ".svg", SearchOption.AllDirectories))
             {
+                Console.Write(".");
+
                 var subpath = PathHelper.Subpath(inputFile, options.InputDirectory);
                 var tempFile = PathHelper.GenerateTempFileName("svg");
 
@@ -73,8 +75,6 @@ namespace SvgToVectorDrawableConverter
                     {
                         outputDocument.Save(writer);
                     }
-
-                    Console.Write(".");
                 }
                 catch (Exception e)
                 {

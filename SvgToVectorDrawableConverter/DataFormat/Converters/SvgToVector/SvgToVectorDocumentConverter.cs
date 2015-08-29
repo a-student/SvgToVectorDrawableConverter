@@ -25,10 +25,12 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         }
 
         private bool _isFillRuleSupported;
+        private bool _isStrokeDasharrayUsed;
 
         private void Reset()
         {
             _isFillRuleSupported = true;
+            _isStrokeDasharrayUsed = false;
         }
 
         [NotNull]
@@ -40,6 +42,10 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 if (!_isFillRuleSupported)
                 {
                     warnings.Add("SVG fill-rule is not properly supported on Android. Please, read https://github.com/a-student/SvgToVectorDrawableConverter#not-supported-svg-features");
+                }
+                if (_isStrokeDasharrayUsed)
+                {
+                    warnings.Add("The stroke-dasharray attribute is not supported.");
                 }
                 return warnings.AsReadOnly();
             }
@@ -203,6 +209,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                                 _isFillRuleSupported = false;
                             }
                         }
+                        break;
+                    case "stroke-dasharray":
+                        _isStrokeDasharrayUsed |= value != "none";
                         break;
                 }
             }
