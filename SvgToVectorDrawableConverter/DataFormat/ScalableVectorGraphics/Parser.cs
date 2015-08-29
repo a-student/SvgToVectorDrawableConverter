@@ -14,6 +14,12 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
         public static Rect ParseViewBox([NotNull] string source)
         {
             // do not use Rect.Parse() - it is not implemented in Mono
+
+            if (source == null)
+            {
+                throw new UnsupportedFormatException("The viewBox attribute must be set.");
+            }
+
             var split = source.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
             return new Rect(
                 double.Parse(split[0], CultureInfo.InvariantCulture),

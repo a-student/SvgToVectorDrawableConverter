@@ -45,17 +45,15 @@ namespace SvgToVectorDrawableConverter
             foreach (var inputFile in Directory.GetFiles(options.InputDirectory, options.InputMask + ".svg", SearchOption.AllDirectories))
             {
                 var subpath = PathHelper.Subpath(inputFile, options.InputDirectory);
+                var tempFile = PathHelper.GenerateTempFileName("svg");
 
                 try
                 {
-                    var tempFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-                    tempFile = Path.ChangeExtension(tempFile, "svg");
                     File.Copy(inputFile, tempFile);
-                    SvgUseElementInliner.InlineUses(tempFile);
+                    SvgPreprocessor.Preprocess(tempFile);
                     Inkscape.SimplifySvgSync(options.InkscapeAppPath, tempFile, tempFile);
-                    var svgDocument = SvgDocumentWrapper.CreateFromFile(tempFile);
-                    File.Delete(tempFile);
 
+                    var svgDocument = SvgDocumentWrapper.CreateFromFile(tempFile);
                     var outputDocument = converter.Convert(svgDocument).WrappedDocument;
                     PrintWarnings(subpath, converter.Warnings);
 
@@ -75,11 +73,15 @@ namespace SvgToVectorDrawableConverter
                     {
                         outputDocument.Save(writer);
                     }
+
+                    Console.Write(".");
                 }
                 catch (Exception e)
                 {
                     PrintError($"{subpath}: {e.Message}");
                 }
+
+                File.Delete(tempFile);
             }
         }
 

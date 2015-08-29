@@ -6,18 +6,31 @@ using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Utils
 {
-    static class SvgUseElementInliner
+    static class SvgPreprocessor
     {
-        public static void InlineUses([NotNull] string filename)
+        public static void Preprocess([NotNull] string filename)
         {
-            var xmlDocument = new XmlDocument();
+            var xmlDocument = new XmlDocument { XmlResolver = null };
             xmlDocument.Load(filename);
+
+            WrapSvgContentInG(xmlDocument);
 
             var map = new Dictionary<string, XmlNode>();
             FillMap(map, xmlDocument.DocumentElement);
             InlineUses(map, xmlDocument.DocumentElement);
 
             xmlDocument.Save(filename);
+        }
+
+        private static void WrapSvgContentInG(XmlDocument xmlDocument)
+        {
+            var svg = xmlDocument.DocumentElement;
+            var g = xmlDocument.CreateElement("g", svg.NamespaceURI);
+            while (svg.HasChildNodes)
+            {
+                g.AppendChild(svg.FirstChild);
+            }
+            svg.AppendChild(g);
         }
 
         private static void FillMap(IDictionary<string, XmlNode> map, XmlNode xmlNode)

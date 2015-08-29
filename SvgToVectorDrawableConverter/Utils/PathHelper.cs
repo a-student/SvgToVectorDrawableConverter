@@ -8,7 +8,7 @@ namespace SvgToVectorDrawableConverter.Utils
         public static string Subpath(string filePath, string directoryPath)
         {
             return filePath.Substring(directoryPath.Length)
-            .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
 
         public static string NormalizeFileName(string filePath)
@@ -23,6 +23,16 @@ namespace SvgToVectorDrawableConverter.Utils
             }
 
             return Path.Combine(Path.GetDirectoryName(filePath), fileName + Path.GetExtension(filePath));
+        }
+
+        public static string GenerateTempFileName(string extension = null)
+        {
+            var result = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            if (extension != null)
+            {
+                result = Path.ChangeExtension(result, extension == string.Empty ? null : extension);
+            }
+            return result;
         }
     }
 }
