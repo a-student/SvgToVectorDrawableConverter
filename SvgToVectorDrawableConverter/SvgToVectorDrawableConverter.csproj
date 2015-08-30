@@ -75,7 +75,8 @@
     <Compile Include="DataFormat\ScalableVectorGraphics\SvgDocumentWrapper.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Title.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Transform.cs" />
-    <Compile Include="DataFormat\Utils\SvgPreprocessor.cs" />
+    <Compile Include="DataFormat\ScalableVectorGraphics\Utils\SvgUseElementInliner.cs" />
+    <Compile Include="Utils\SvgPreprocessor.cs" />
     <Compile Include="DataFormat\VectorDrawable\FillType.cs" />
     <Compile Include="DataFormat\VectorDrawable\Group.cs" />
     <Compile Include="DataFormat\VectorDrawable\Path.cs" />
@@ -107,6 +108,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(SolutionDir)\ILMerge.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

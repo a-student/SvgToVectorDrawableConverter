@@ -59,7 +59,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
             }
             var definition = match.Groups["definition"].Value;
             var values = match.Groups["values"].Value
-                .Split(',', ' ')
+                .Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => double.Parse(x, CultureInfo.InvariantCulture))
                 .ToArray();
             switch (definition.ToLower())

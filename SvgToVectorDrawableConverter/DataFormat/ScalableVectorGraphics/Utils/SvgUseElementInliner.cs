@@ -2,50 +2,31 @@
 using System.Xml;
 using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
+
 // ReSharper disable PossibleNullReferenceException
 
-namespace SvgToVectorDrawableConverter.DataFormat.Utils
+namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics.Utils
 {
-    static class SvgPreprocessor
+    static class SvgUseElementInliner
     {
-        public static void Preprocess([NotNull] string filename)
+        public static void InlineUses([NotNull] XmlDocument xmlDocument)
         {
-            var xmlDocument = new XmlDocument { XmlResolver = null };
-            xmlDocument.Load(filename);
+            InlineUses(CreateMap(xmlDocument.DocumentElement), xmlDocument.DocumentElement);
+        }
 
-            WrapSvgContentInG(xmlDocument);
-
+        private static Dictionary<string, XmlNode> CreateMap(XmlNode documentElement)
+        {
             var map = new Dictionary<string, XmlNode>();
-            FillMap(map, xmlDocument.DocumentElement);
-            InlineUses(map, xmlDocument.DocumentElement);
 
-            xmlDocument.Save(filename);
-        }
-
-        private static void WrapSvgContentInG(XmlDocument xmlDocument)
-        {
-            var svg = xmlDocument.DocumentElement;
-            var g = xmlDocument.CreateElement("g", svg.NamespaceURI);
-            while (svg.HasChildNodes)
+            foreach (XmlNode node in documentElement.SelectNodes("//*[@id]"))
             {
-                g.AppendChild(svg.FirstChild);
-            }
-            svg.AppendChild(g);
-        }
-
-        private static void FillMap(IDictionary<string, XmlNode> map, XmlNode xmlNode)
-        {
-            var id = xmlNode.Attributes?["id"];
-            if (id != null)
-            {
-                var clone = xmlNode.CloneNode(true);
+                var id = node.Attributes["id"];
+                var clone = node.CloneNode(true);
                 clone.Attributes.RemoveNamedItem("id");
                 map[id.Value] = clone;
             }
-            foreach (XmlNode childNode in xmlNode.ChildNodes)
-            {
-                FillMap(map, childNode);
-            }
+
+            return map;
         }
 
         private static void InlineUses(IReadOnlyDictionary<string, XmlNode> map, XmlNode xmlNode)
@@ -100,9 +81,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Utils
             transform += $"translate({x}, {y})";
             inline.SetAttribute("transform", transform);
 
-            foreach (XmlNode child in useNode.ChildNodes)
+            while (useNode.HasChildNodes)
             {
-                inline.AppendChild(child);
+                inline.AppendChild(useNode.FirstChild);
             }
             inline.AppendChild(refNode);
 
