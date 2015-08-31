@@ -58,12 +58,16 @@
     <Compile Include="DataFormat\Common\ElementCollection.cs" />
     <Compile Include="DataFormat\Common\ElementFactory.cs" />
     <Compile Include="DataFormat\Common\ElementWithChildren.cs" />
+    <Compile Include="DataFormat\Common\XmlNameAttribute.cs" />
+    <Compile Include="DataFormat\Converters\SvgToVector\ClipPathHelper.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\PathDataFixer.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\SvgToVectorDocumentConverter.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\VectorOptimizer.cs" />
     <Compile Include="DataFormat\Exceptions\UnsupportedFormatException.cs" />
+    <Compile Include="DataFormat\Extensions\StringExtension.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Defs.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Desc.cs" />
+    <Compile Include="DataFormat\ScalableVectorGraphics\ClipPath.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\G.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\IStyleableElement.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Metadata.cs" />
@@ -75,7 +79,9 @@
     <Compile Include="DataFormat\ScalableVectorGraphics\SvgDocumentWrapper.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Title.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Transform.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Utils\SvgUseElementInliner.cs" />
+    <Compile Include="DataFormat\Utils\SvgUseElementInliner.cs" />
+    <Compile Include="DataFormat\VectorDrawable\ClipPath.cs" />
+    <Compile Include="DataFormat\VectorDrawable\PathBase.cs" />
     <Compile Include="Utils\SvgPreprocessor.cs" />
     <Compile Include="DataFormat\VectorDrawable\FillType.cs" />
     <Compile Include="DataFormat\VectorDrawable\Group.cs" />

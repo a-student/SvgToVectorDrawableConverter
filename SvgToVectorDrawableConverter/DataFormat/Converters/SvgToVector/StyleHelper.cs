@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using JetBrains.Annotations;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
@@ -13,13 +14,21 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             { "fill-rule", "nonzero" }
         };
 
+        private static readonly HashSet<string> NotInheritedStyles = new HashSet<string>
+        {
+            "clip-path"
+        };
+
         [NotNull]
         public static StringDictionary MergeStyles([NotNull] StringDictionary parentStyle, [NotNull] StringDictionary style)
         {
             var result = new StringDictionary();
             foreach (string key in parentStyle.Keys)
             {
-                result[key] = parentStyle[key];
+                if (!NotInheritedStyles.Contains(key))
+                {
+                    result[key] = parentStyle[key];
+                }
             }
             foreach (string key in style.Keys)
             {

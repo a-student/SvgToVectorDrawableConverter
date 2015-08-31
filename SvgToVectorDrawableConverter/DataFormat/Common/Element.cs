@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using JetBrains.Annotations;
+using SvgToVectorDrawableConverter.DataFormat.Extensions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Common
 {
@@ -18,7 +19,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
 
         protected internal T GetAttribute<T>(T defaultValue = default(T), [CallerMemberName] string name = null)
         {
-            name = FirstCharToLower(name);
+            name = name.FirstCharToLower();
             var attribute = WrappedElement.Attributes[name];
             if (attribute == null)
             {
@@ -35,7 +36,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
                 return;
             }
 
-            name = FirstCharToLower(name);
+            name = name.FirstCharToLower();
             var attribute = WrappedElement.Attributes[name, namespaceUri];
             if (attribute == null)
             {
@@ -52,14 +53,11 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
             }
         }
 
-        private static string FirstCharToLower(string s)
-        {
-            return char.ToLower(s[0]) + s.Substring(1);
-        }
-
         public override string ToString()
         {
             return WrappedElement.Name;
         }
+
+        public string Id => GetAttribute<string>();
     }
 }

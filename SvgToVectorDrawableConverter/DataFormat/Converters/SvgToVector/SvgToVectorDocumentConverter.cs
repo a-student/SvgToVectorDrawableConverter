@@ -11,6 +11,8 @@ using SvgToVectorDrawableConverter.DataFormat.VectorDrawable;
 using Group = SvgToVectorDrawableConverter.DataFormat.VectorDrawable.Group;
 using VdPath = SvgToVectorDrawableConverter.DataFormat.VectorDrawable.Path;
 using SvgPath = SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics.Path;
+using VdClipPath = SvgToVectorDrawableConverter.DataFormat.VectorDrawable.ClipPath;
+using SvgClipPath = SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics.ClipPath;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 {
@@ -24,12 +26,12 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             _blankVectorDrawablePath = blankVectorDrawablePath;
         }
 
-        private bool _isFillRuleSupported;
+        private bool _isFillTypeSupported;
         private bool _isStrokeDasharrayUsed;
 
         private void Reset()
         {
-            _isFillRuleSupported = true;
+            _isFillTypeSupported = true;
             _isStrokeDasharrayUsed = false;
         }
 
@@ -39,9 +41,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             get
             {
                 var warnings = new List<string>();
-                if (!_isFillRuleSupported)
+                if (!_isFillTypeSupported)
                 {
-                    warnings.Add("SVG fill-rule is not properly supported on Android. Please, read https://github.com/a-student/SvgToVectorDrawableConverter#not-supported-svg-features");
+                    warnings.Add("SVG fill-rule and clip-rule are not properly supported on Android. Please, read https://github.com/a-student/SvgToVectorDrawableConverter#not-supported-svg-features");
                 }
                 if (_isStrokeDasharrayUsed)
                 {
@@ -51,10 +53,31 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
         }
 
+        private Dictionary<string, Element> _map;
+
+        private static void FillMap(IDictionary<string, Element> map, Element root)
+        {
+            if (!string.IsNullOrEmpty(root.Id))
+            {
+                map[root.Id] = root;
+            }
+            if (!(root is ElementWithChildren))
+            {
+                return;
+            }
+            foreach (var child in ((ElementWithChildren)root).Children)
+            {
+                FillMap(map, child);
+            }
+        }
+
         [NotNull]
         public DocumentWrapper<Vector> Convert([NotNull] DocumentWrapper<Svg> svgDocument)
         {
             Reset();
+
+            _map = new Dictionary<string, Element>();
+            FillMap(_map, svgDocument.Root);
 
             var vectorDocument = VectorDocumentWrapper.CreateFromFile(_blankVectorDrawablePath);
 
@@ -115,9 +138,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
         private void InitRecursively(Group group, G g, StringDictionary parentStyle)
         {
-            Init(group, g.Transform);
-
-            AppendAll(group.Children, g.Children, StyleHelper.MergeStyles(parentStyle, g.Style));
+            var style = StyleHelper.MergeStyles(parentStyle, g.Style);
+            Init(group, g.Transform, style);
+            AppendAll(group.Children, g.Children, style);
         }
 
         private void AppendAll(ElementCollection elements, ElementCollection children, StringDictionary parentStyle)
@@ -131,30 +154,26 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 if (child is G)
                 {
                     InitRecursively(elements.Append<Group>(), (G)child, parentStyle);
-                    continue;
                 }
-                if (child is SvgPath)
+                else if (child is SvgPath)
                 {
                     Init(elements.Append<Group>(), (SvgPath)child, parentStyle);
-                    continue;
                 }
-                if (child is Metadata || child is Title || child is Desc || child is Defs)
-                {
-                    continue;
-                }
-                throw new UnsupportedFormatException($"Met unallowed element '{child}'.");
             }
+        }
+
+        private static bool IsDisplayed(IStyleableElement element)
+        {
+            return element.Style["display"] != "none";
         }
 
         private void Init(Group group, SvgPath svgPath, StringDictionary parentStyle)
         {
-            Init(group, svgPath.Transform);
-
+            var style = StyleHelper.MergeStyles(parentStyle, svgPath.Style);
+            Init(group, svgPath.Transform, style);
             var vdPath = group.Children.Append<VdPath>();
-
             vdPath.PathData = PathDataFixer.Fix(svgPath.D);
 
-            var style = StyleHelper.MergeStyles(parentStyle, svgPath.Style);
             foreach (string key in style.Keys)
             {
                 var value = style[key];
@@ -191,24 +210,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                         vdPath.StrokeMiterLimit = value;
                         break;
                     case "fill-rule":
-                        FillType? fillType = null;
-                        switch (value)
-                        {
-                            case "nonzero":
-                                fillType = FillType.winding;
-                                break;
-                            case "evenodd":
-                                fillType = FillType.even_odd;
-                                break;
-                        }
-                        if (fillType.HasValue)
-                        {
-                            vdPath.FillType = fillType.Value;
-                            if (vdPath.FillType != fillType.Value)
-                            {
-                                _isFillRuleSupported = false;
-                            }
-                        }
+                        SetFillType(vdPath, value);
                         break;
                     case "stroke-dasharray":
                         _isStrokeDasharrayUsed |= value != "none";
@@ -217,7 +219,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
         }
 
-        private static void Init(Group group, Transform transform)
+        private void Init(Group group, Transform transform, StringDictionary style)
         {
             if (transform is Transform.Matrix)
             {
@@ -247,11 +249,45 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 group.PivotX = rotate.Cx;
                 group.PivotY = rotate.Cy;
             }
+
+            var clipPath = style["clip-path"];
+            if (!string.IsNullOrEmpty(clipPath))
+            {
+                var match = Regex.Match(clipPath, @"^url\(#(?<key>.+)\)$");
+                if (!match.Success)
+                {
+                    throw new UnsupportedFormatException("Wrong clip-path attribute value.");
+                }
+                var key = match.Groups["key"].Value;
+                foreach (var x in ClipPathHelper.ExtractPaths((SvgClipPath)_map[key]))
+                {
+                    var vdClipPath = group.Children.Append<VdClipPath>();
+                    vdClipPath.PathData = PathDataFixer.Fix(x.Path.D);
+                    SetFillType(vdClipPath, x.Style["clip-rule"]);
+                }
+            }
         }
 
-        private static bool IsDisplayed(IStyleableElement element)
+        private void SetFillType(PathBase path, string rule)
         {
-            return element.Style["display"] != "none";
+            FillType? fillType = null;
+            switch (rule)
+            {
+                case "nonzero":
+                    fillType = FillType.winding;
+                    break;
+                case "evenodd":
+                    fillType = FillType.even_odd;
+                    break;
+            }
+            if (fillType.HasValue)
+            {
+                path.FillType = fillType.Value;
+                if (path.FillType != fillType.Value)
+                {
+                    _isFillTypeSupported = false;
+                }
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Linq;
+using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 using SvgToVectorDrawableConverter.DataFormat.VectorDrawable;
 
@@ -55,8 +56,17 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                     {
                         elements.RemoveAt(i--);
                     }
+                    continue;
                 }
-                else if (element is ElementWithChildren)
+                if (element is ClipPath)
+                {
+                    if (string.IsNullOrEmpty(((ClipPath)element).PathData))
+                    {
+                        elements.RemoveAt(i--);
+                    }
+                    continue;
+                }
+                if (element is ElementWithChildren)
                 {
                     RemoveInvisiblePaths(((ElementWithChildren)element).Children);
                 }
@@ -90,7 +100,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                     continue;
                 }
                 RemoveEmptyGroups(element.Children);
-                if (element.Children.Count == 0)
+                if (element.Children.All(x => x is ClipPath))
                 {
                     elements.RemoveAt(i--);
                 }
@@ -135,6 +145,10 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 return false;
             }
             if (group.TranslateX != 0 || group.TranslateY != 0)
+            {
+                return false;
+            }
+            if (group.Children.Any(x => x is ClipPath))
             {
                 return false;
             }

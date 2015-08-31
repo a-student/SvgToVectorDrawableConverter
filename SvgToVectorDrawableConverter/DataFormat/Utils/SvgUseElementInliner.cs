@@ -5,7 +5,7 @@ using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 
 // ReSharper disable PossibleNullReferenceException
 
-namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics.Utils
+namespace SvgToVectorDrawableConverter.DataFormat.Utils
 {
     static class SvgUseElementInliner
     {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml;
 using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
+using SvgToVectorDrawableConverter.DataFormat.Extensions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Common
 {
@@ -10,7 +11,11 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
     {
         private static string GetXmlName(Type elementType)
         {
-            return elementType.Name.ToLower();
+            var name = elementType.GetCustomAttributes(typeof(XmlNameAttribute), false)
+                .Cast<XmlNameAttribute>()
+                .SingleOrDefault()
+                ?.Name;
+            return name ?? elementType.Name.FirstCharToLower();
         }
 
         [NotNull]

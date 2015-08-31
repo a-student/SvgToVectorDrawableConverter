@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 using JetBrains.Annotations;
-using SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics.Utils;
+using SvgToVectorDrawableConverter.DataFormat.Utils;
 
 // ReSharper disable PossibleNullReferenceException
 
