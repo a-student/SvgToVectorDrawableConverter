@@ -4,7 +4,7 @@ using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
 {
-    [XmlName("clip-path")]
+    [XmlNames("clip-path")]
     class ClipPath : PathBase
     {
         public ClipPath([NotNull] XmlElement wrappedElement)

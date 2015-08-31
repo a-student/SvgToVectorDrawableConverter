@@ -2,27 +2,26 @@
 using System.Linq;
 using System.Xml;
 using JetBrains.Annotations;
-using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 using SvgToVectorDrawableConverter.DataFormat.Extensions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Common
 {
     static class ElementFactory
     {
-        private static string GetXmlName(Type elementType)
+        private static string[] GetXmlNames(Type elementType)
         {
-            var name = elementType.GetCustomAttributes(typeof(XmlNameAttribute), false)
-                .Cast<XmlNameAttribute>()
+            return elementType.GetCustomAttributes(typeof(XmlNamesAttribute), false)
+                .Cast<XmlNamesAttribute>()
                 .SingleOrDefault()
-                ?.Name;
-            return name ?? elementType.Name.FirstCharToLower();
+                ?.Names
+                ?? new[] { elementType.Name.FirstCharToLower() };
         }
 
         [NotNull]
         public static T Create<T>([NotNull] XmlDocument xmlDocument, [NotNull] out XmlElement xmlElement)
             where T : Element
         {
-            xmlElement = xmlDocument.CreateElement(GetXmlName(typeof(T)));
+            xmlElement = xmlDocument.CreateElement(GetXmlNames(typeof(T))[0]);
             return (T)Wrap(xmlElement);
         }
 
@@ -40,15 +39,15 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
             try
             {
                 var rootType = ElementTypes
-                    .Single(x => GetXmlName(x) == xmlElement.OwnerDocument.DocumentElement.Name);
+                    .Single(x => GetXmlNames(x).Contains(xmlElement.OwnerDocument.DocumentElement.Name));
                 var type = ElementTypes
                     .Where(x => x.Namespace == rootType.Namespace)
-                    .Single(x => GetXmlName(x) == xmlElement.Name);
+                    .Single(x => GetXmlNames(x).Contains(xmlElement.Name));
                 return (Element)Activator.CreateInstance(type, xmlElement);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
-                throw new UnsupportedFormatException($"Element '{xmlElement.Name}' is not supported.", e);
+                return new UnsupportedElement(xmlElement);
             }
         }
     }

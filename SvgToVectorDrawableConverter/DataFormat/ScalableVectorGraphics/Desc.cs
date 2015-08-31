@@ -4,6 +4,7 @@ using SvgToVectorDrawableConverter.DataFormat.Common;
 
 namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
 {
+    [XmlNames("desc", "description")]
     class Desc : Element
     {
         public Desc([NotNull] XmlElement wrappedElement)

@@ -154,10 +154,16 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 if (child is G)
                 {
                     InitRecursively(elements.Append<Group>(), (G)child, parentStyle);
+                    continue;
                 }
-                else if (child is SvgPath)
+                if (child is SvgPath)
                 {
                     Init(elements.Append<Group>(), (SvgPath)child, parentStyle);
+                    continue;
+                }
+                if (child is UnsupportedElement)
+                {
+                    throw new UnsupportedFormatException($"Met unsupported element '{child}'.");
                 }
             }
         }

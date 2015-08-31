@@ -58,7 +58,8 @@
     <Compile Include="DataFormat\Common\ElementCollection.cs" />
     <Compile Include="DataFormat\Common\ElementFactory.cs" />
     <Compile Include="DataFormat\Common\ElementWithChildren.cs" />
-    <Compile Include="DataFormat\Common\XmlNameAttribute.cs" />
+    <Compile Include="DataFormat\Common\UnsupportedElement.cs" />
+    <Compile Include="DataFormat\Common\XmlNamesAttribute.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\ClipPathHelper.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\PathDataFixer.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\SvgToVectorDocumentConverter.cs" />
