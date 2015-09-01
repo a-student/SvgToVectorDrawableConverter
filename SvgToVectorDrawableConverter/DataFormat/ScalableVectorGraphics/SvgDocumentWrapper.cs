@@ -9,7 +9,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
         [NotNull]
         public static DocumentWrapper<Svg> CreateFromFile([NotNull] string filename)
         {
-            var xmlDocument = new XmlDocument();
+            var xmlDocument = new XmlDocument { XmlResolver = null };
             xmlDocument.Load(filename);
             return new DocumentWrapper<Svg>(xmlDocument);
         }
