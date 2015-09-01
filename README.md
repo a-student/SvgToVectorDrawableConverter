@@ -36,7 +36,7 @@ This command prints usage and option explanations.
 
 Typical usage:
 ```
-mono svg2vd.exe -i *
+mono svg2vd.exe -i \*
 ```
 (Converts all SVG files in current directory.)
 
@@ -63,7 +63,7 @@ To reverse the path direction apply *Layer* → *Paths* → *Reverse Order* comm
 BetterVectorDrawable supports **fillType** attribute in the vector drawable XML (analogue of SVG’s fill-rule).
 To produce vector drawables for this lib, append to the converter command the `--lib BetterVectorDrawable` argument like
 ```
-[mono] svg2vd.exe -i * --lib BetterVectorDrawable
+svg2vd.exe -i * --lib BetterVectorDrawable
 ```
 This command creates vector drawables containing additional attributes that are understandable by the lib.
 
