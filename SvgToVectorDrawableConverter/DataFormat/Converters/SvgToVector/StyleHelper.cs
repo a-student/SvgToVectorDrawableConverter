@@ -16,16 +16,19 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
         private static readonly HashSet<string> NotInheritedStyles = new HashSet<string>
         {
-            "clip-path"
+            "clip-path",
+            "opacity"
         };
 
         [NotNull]
         public static StringDictionary MergeStyles([NotNull] StringDictionary parentStyle, [NotNull] StringDictionary style)
         {
+            const string inherit = "inherit";
+
             var result = new StringDictionary();
             foreach (string key in parentStyle.Keys)
             {
-                if (!NotInheritedStyles.Contains(key))
+                if (style[key] == inherit || !NotInheritedStyles.Contains(key))
                 {
                     result[key] = parentStyle[key];
                 }
@@ -33,7 +36,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             foreach (string key in style.Keys)
             {
                 var value = style[key];
-                if (value != "inherit")
+                if (value != inherit)
                 {
                     result[key] = value;
                 }

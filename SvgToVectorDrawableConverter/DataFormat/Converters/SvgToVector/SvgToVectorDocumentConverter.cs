@@ -89,10 +89,14 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             vectorDocument.Root.Width = ConvertToDp(svgDocument.Root.Width, viewBox.Width);
             vectorDocument.Root.Height = ConvertToDp(svgDocument.Root.Height, viewBox.Height);
 
+            var style = StyleHelper.MergeStyles(StyleHelper.InitialStyles, svgDocument.Root.Style);
+
+            vectorDocument.Root.Alpha = float.Parse(style["opacity"] ?? "1", CultureInfo.InvariantCulture);
+
             var group = vectorDocument.Root.Children.Append<Group>();
             group.TranslateX = -viewBox.X;
             group.TranslateY = -viewBox.Y;
-            AppendAll(group.Children, svgDocument.Root.Children, StyleHelper.MergeStyles(StyleHelper.InitialStyles, svgDocument.Root.Style));
+            AppendAll(group.Children, svgDocument.Root.Children, style);
 
             VectorOptimizer.Optimize(vectorDocument.Root);
             return vectorDocument;
@@ -201,10 +205,14 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                         vdPath.StrokeWidth = float.Parse(value, CultureInfo.InvariantCulture);
                         break;
                     case "stroke-opacity":
-                        vdPath.StrokeAlpha = float.Parse(value, CultureInfo.InvariantCulture);
+                        vdPath.StrokeAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
                         break;
                     case "fill-opacity":
-                        vdPath.FillAlpha = float.Parse(value, CultureInfo.InvariantCulture);
+                        vdPath.FillAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
+                        break;
+                    case "opacity":
+                        vdPath.StrokeAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
+                        vdPath.FillAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
                         break;
                     case "stroke-linecap":
                         vdPath.StrokeLineCap = value;

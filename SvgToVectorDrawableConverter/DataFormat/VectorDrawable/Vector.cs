@@ -48,5 +48,14 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
                 SetAttribute(Convert.ToSingle(value), "better");
             }
         }
+
+        public float Alpha
+        {
+            set
+            {
+                SetAttribute(value, "android", 1);
+                SetAttribute(value, "auto", 1);
+            }
+        }
     }
 }
