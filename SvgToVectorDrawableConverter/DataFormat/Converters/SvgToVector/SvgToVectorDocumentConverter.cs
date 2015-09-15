@@ -82,17 +82,17 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             var vectorDocument = VectorDocumentWrapper.CreateFromFile(_blankVectorDrawablePath);
 
             var viewBox = svgDocument.Root.ViewBox;
-            if (viewBox.X != 0 || viewBox.Y != 0)
-            {
-                throw new UnsupportedFormatException("X and y coordinates of viewBox must be zeros.");
-            }
+
             vectorDocument.Root.ViewportWidth = viewBox.Width;
             vectorDocument.Root.ViewportHeight = viewBox.Height;
 
             vectorDocument.Root.Width = ConvertToDp(svgDocument.Root.Width, viewBox.Width);
             vectorDocument.Root.Height = ConvertToDp(svgDocument.Root.Height, viewBox.Height);
 
-            AppendAll(vectorDocument.Root.Children, svgDocument.Root.Children, StyleHelper.MergeStyles(StyleHelper.InitialStyles, svgDocument.Root.Style));
+            var group = vectorDocument.Root.Children.Append<Group>();
+            group.TranslateX = -viewBox.X;
+            group.TranslateY = -viewBox.Y;
+            AppendAll(group.Children, svgDocument.Root.Children, StyleHelper.MergeStyles(StyleHelper.InitialStyles, svgDocument.Root.Style));
 
             VectorOptimizer.Optimize(vectorDocument.Root);
             return vectorDocument;
