@@ -77,6 +77,7 @@
     <Compile Include="DataFormat\ScalableVectorGraphics\Styler.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Svg.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\SvgDocumentWrapper.cs" />
+    <Compile Include="DataFormat\ScalableVectorGraphics\Style.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Title.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Transform.cs" />
     <Compile Include="DataFormat\Utils\SvgUseElementInliner.cs" />

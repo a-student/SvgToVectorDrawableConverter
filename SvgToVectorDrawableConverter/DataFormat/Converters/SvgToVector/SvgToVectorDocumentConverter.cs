@@ -28,11 +28,13 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
         private bool _isFillTypeSupported;
         private bool _isStrokeDasharrayUsed;
+        private readonly HashSet<string> _unsupportedElements = new HashSet<string>();
 
         private void Reset()
         {
             _isFillTypeSupported = true;
             _isStrokeDasharrayUsed = false;
+            _unsupportedElements.Clear();
         }
 
         [NotNull]
@@ -48,6 +50,10 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 if (_isStrokeDasharrayUsed)
                 {
                     warnings.Add("The stroke-dasharray attribute is not supported.");
+                }
+                if (_unsupportedElements.Count > 0)
+                {
+                    warnings.Add($"Met unsupported element(s): {string.Join(", ", _unsupportedElements)}.");
                 }
                 return warnings.AsReadOnly();
             }
@@ -167,7 +173,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 }
                 if (child is UnsupportedElement)
                 {
-                    throw new UnsupportedFormatException($"Met unsupported element '{child}'.");
+                    _unsupportedElements.Add(child.ToString());
                 }
             }
         }
