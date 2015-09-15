@@ -26,11 +26,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
         private static IEnumerable<PathWithStyle> ExtractPaths(ElementWithChildren element, StringDictionary parentStyle)
         {
-            var style = parentStyle;
-            if (element is IStyleableElement)
-            {
-                style = StyleHelper.MergeStyles(parentStyle, ((IStyleableElement)element).Style);
-            }
+            var style = StyleHelper.MergeStyles(parentStyle, Styler.GetStyle(element));
 
             foreach (var child in element.Children)
             {

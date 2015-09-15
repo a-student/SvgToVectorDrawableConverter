@@ -151,7 +151,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             foreach (var child in children)
             {
-                if (child is IStyleableElement && !IsDisplayed((IStyleableElement)child))
+                if (!IsDisplayed(child))
                 {
                     continue;
                 }
@@ -172,9 +172,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
         }
 
-        private static bool IsDisplayed(IStyleableElement element)
+        private static bool IsDisplayed(Element element)
         {
-            return element.Style["display"] != "none";
+            return Styler.GetStyle(element)["display"] != "none";
         }
 
         private void Init(Group group, SvgPath svgPath, StringDictionary parentStyle)

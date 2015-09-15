@@ -17,7 +17,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         private static readonly HashSet<string> NotInheritedStyles = new HashSet<string>
         {
             "clip-path",
-            "opacity"
+            "opacity",
+            "display"
         };
 
         [NotNull]

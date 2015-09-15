@@ -8,7 +8,7 @@ using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
 {
-    class Svg : ElementWithChildren, IStyleableElement
+    class Svg : ElementWithChildren
     {
         public Svg([NotNull] XmlElement wrappedElement)
             : base(wrappedElement)

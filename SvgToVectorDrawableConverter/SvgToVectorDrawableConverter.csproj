@@ -70,7 +70,6 @@
     <Compile Include="DataFormat\ScalableVectorGraphics\Desc.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\ClipPath.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\G.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\IStyleableElement.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Metadata.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Parser.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Path.cs" />
