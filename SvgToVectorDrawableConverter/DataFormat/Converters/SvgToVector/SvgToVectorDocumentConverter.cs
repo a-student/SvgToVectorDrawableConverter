@@ -108,42 +108,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             return vectorDocument;
         }
 
-        private static string ConvertToDp(string dimension, double viewBox)
+        private static string ConvertToDp(string length, double reference)
         {
-            Func<double, string> format = x => string.Format(CultureInfo.InvariantCulture, "{0}dp", x);
-
-            if (string.IsNullOrEmpty(dimension))
-            {
-                return format(viewBox);
-            }
-
-            var value = double.Parse(Regex.Replace(dimension, "[^0-9.]", ""), CultureInfo.InvariantCulture);
-
-            if (dimension.EndsWith("in"))
-            {
-                return format(value * 90);
-            }
-            if (dimension.EndsWith("cm"))
-            {
-                return format(value * 35.43307);
-            }
-            if (dimension.EndsWith("mm"))
-            {
-                return format(value * 3.543307);
-            }
-            if (dimension.EndsWith("pt"))
-            {
-                return format(value * 1.25);
-            }
-            if (dimension.EndsWith("pc"))
-            {
-                return format(value * 15);
-            }
-            if (dimension.EndsWith("%"))
-            {
-                return format(viewBox * value / 100);
-            }
-            return format(value);
+            return string.Format(CultureInfo.InvariantCulture, "{0}dp", UnitConverter.ConvertToPx(length, reference));
         }
 
         private void InitRecursively(Group group, G g, StringDictionary parentStyle)
@@ -208,7 +175,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                         }
                         break;
                     case "stroke-width":
-                        vdPath.StrokeWidth = float.Parse(value, CultureInfo.InvariantCulture);
+                        vdPath.StrokeWidth = (float)UnitConverter.ConvertToPx(value, 0);
                         break;
                     case "stroke-opacity":
                         vdPath.StrokeAlpha *= float.Parse(value, CultureInfo.InvariantCulture);

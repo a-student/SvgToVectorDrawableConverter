@@ -63,6 +63,7 @@
     <Compile Include="DataFormat\Converters\SvgToVector\ClipPathHelper.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\PathDataFixer.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\SvgToVectorDocumentConverter.cs" />
+    <Compile Include="DataFormat\Converters\SvgToVector\UnitConverter.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\VectorOptimizer.cs" />
     <Compile Include="DataFormat\Exceptions\UnsupportedFormatException.cs" />
     <Compile Include="DataFormat\Extensions\StringExtension.cs" />
