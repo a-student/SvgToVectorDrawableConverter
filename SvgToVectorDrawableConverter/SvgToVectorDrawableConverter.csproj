@@ -65,6 +65,7 @@
     <Compile Include="DataFormat\Converters\SvgToVector\SvgToVectorDocumentConverter.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\UnitConverter.cs" />
     <Compile Include="DataFormat\Converters\SvgToVector\VectorOptimizer.cs" />
+    <Compile Include="DataFormat\Exceptions\FixFillTypeException.cs" />
     <Compile Include="DataFormat\Exceptions\UnsupportedFormatException.cs" />
     <Compile Include="DataFormat\Extensions\StringExtension.cs" />
     <Compile Include="DataFormat\ScalableVectorGraphics\Defs.cs" />
@@ -116,7 +117,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PathFillTypeConverter\PathFillTypeConverter.csproj">
+      <Project>{af734cdc-3d9e-437d-93bb-1d75c01f5363}</Project>
+      <Name>PathFillTypeConverter</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(SolutionDir)\ILMerge.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

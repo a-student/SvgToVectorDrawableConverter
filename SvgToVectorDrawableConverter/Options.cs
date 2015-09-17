@@ -78,6 +78,9 @@ namespace SvgToVectorDrawableConverter
             set { _inkscapeAppPath = value; }
         }
 
+        [Option("fix-fill-type", HelpText = "Experimental.")]
+        public bool FixFillType { get; set; }
+
         [ParserState]
         public IParserState LastParserState { get; set; }
 
@@ -86,7 +89,7 @@ namespace SvgToVectorDrawableConverter
         {
             var helpText = new HelpText { AddDashesToOption = true };
             HelpText.DefaultParsingErrorsHandler(this, helpText);
-            helpText.AddPreOptionsLine($"Usage: {App.ExeName} -i <input file mask> [-o <output directory>] [--lib <lib name>] [--inkscape <inkscape app path>]");
+            helpText.AddPreOptionsLine($"Usage: {App.ExeName} -i <input file mask> [-o <output directory>] [--lib <lib name>] [--inkscape <inkscape app path>] [--fix-fill-type]");
             helpText.AddOptions(this);
             helpText.AddPostOptionsLine(GetGithub());
             return helpText;

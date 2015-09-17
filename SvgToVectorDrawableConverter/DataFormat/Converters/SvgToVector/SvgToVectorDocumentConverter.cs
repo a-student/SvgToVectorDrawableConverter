@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
+using PathFillTypeConverter;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 using SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics;
@@ -20,10 +21,12 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
     {
         [NotNull]
         private readonly string _blankVectorDrawablePath;
+        private readonly bool _fixFillType;
 
-        public SvgToVectorDocumentConverter([NotNull] string blankVectorDrawablePath)
+        public SvgToVectorDocumentConverter([NotNull] string blankVectorDrawablePath, bool fixFillType)
         {
             _blankVectorDrawablePath = blankVectorDrawablePath;
+            _fixFillType = fixFillType;
         }
 
         private bool _isFillTypeSupported;
@@ -45,7 +48,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 var warnings = new List<string>();
                 if (!_isFillTypeSupported)
                 {
-                    warnings.Add("SVG fill-rule and clip-rule are not properly supported on Android. Please, read https://github.com/a-student/SvgToVectorDrawableConverter#not-supported-svg-features");
+                    warnings.Add("SVG fill-rule and clip-rule are not properly supported on Android. Please, read https://github.com/a-student/SvgToVectorDrawableConverter#not-supported-svg-features. Try specifying the --fix-fill-type option.");
                 }
                 if (_isStrokeDasharrayUsed)
                 {
@@ -154,8 +157,16 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             var style = StyleHelper.MergeStyles(parentStyle, svgPath.Style);
             Init(group, svgPath.Transform, style);
-            var vdPath = group.Children.Append<VdPath>();
-            vdPath.PathData = PathDataFixer.Fix(svgPath.D);
+            var fillPath = group.Children.Append<VdPath>();
+            var strokePath = fillPath;
+
+            fillPath.PathData = svgPath.D;
+            if (style.ContainsKey("fill") && SetFillType(fillPath, style["fill-rule"]))
+            {
+                strokePath = group.Children.Append<VdPath>();
+                strokePath.PathData = PathDataFixer.Fix(svgPath.D);
+            }
+            fillPath.PathData = PathDataFixer.Fix(fillPath.PathData);
 
             foreach (string key in style.Keys)
             {
@@ -165,39 +176,36 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                     case "fill":
                         if (value.StartsWith("#"))
                         {
-                            vdPath.FillColor = value;
+                            fillPath.FillColor = value;
                         }
                         break;
                     case "stroke":
                         if (value.StartsWith("#"))
                         {
-                            vdPath.StrokeColor = value;
+                            strokePath.StrokeColor = value;
                         }
                         break;
                     case "stroke-width":
-                        vdPath.StrokeWidth = (float)UnitConverter.ConvertToPx(value, 0);
+                        strokePath.StrokeWidth = (float)UnitConverter.ConvertToPx(value, 0);
                         break;
                     case "stroke-opacity":
-                        vdPath.StrokeAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
+                        strokePath.StrokeAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
                         break;
                     case "fill-opacity":
-                        vdPath.FillAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
+                        fillPath.FillAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
                         break;
                     case "opacity":
-                        vdPath.StrokeAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
-                        vdPath.FillAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
+                        strokePath.StrokeAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
+                        fillPath.FillAlpha *= float.Parse(value, CultureInfo.InvariantCulture);
                         break;
                     case "stroke-linecap":
-                        vdPath.StrokeLineCap = value;
+                        strokePath.StrokeLineCap = value;
                         break;
                     case "stroke-linejoin":
-                        vdPath.StrokeLineJoin = value;
+                        strokePath.StrokeLineJoin = value;
                         break;
                     case "stroke-miterlimit":
-                        vdPath.StrokeMiterLimit = value;
-                        break;
-                    case "fill-rule":
-                        SetFillType(vdPath, value);
+                        strokePath.StrokeMiterLimit = value;
                         break;
                     case "stroke-dasharray":
                         _isStrokeDasharrayUsed |= value != "none";
@@ -249,14 +257,16 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 foreach (var x in ClipPathHelper.ExtractPaths((SvgClipPath)_map[key]))
                 {
                     var vdClipPath = group.Children.Append<VdClipPath>();
-                    vdClipPath.PathData = PathDataFixer.Fix(x.Path.D);
+                    vdClipPath.PathData = x.Path.D;
                     SetFillType(vdClipPath, x.Style["clip-rule"]);
+                    vdClipPath.PathData = PathDataFixer.Fix(vdClipPath.PathData);
                 }
             }
         }
 
-        private void SetFillType(PathBase path, string rule)
+        private bool SetFillType(PathBase path, string rule)
         {
+            var separatePathForStroke = false;
             FillType? fillType = null;
             switch (rule)
             {
@@ -269,12 +279,26 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
             if (fillType.HasValue)
             {
+                if (fillType.Value == FillType.even_odd && _fixFillType)
+                {
+                    try
+                    {
+                        path.PathData = PathDataConverter.ConvertFillTypeFromEvenOddToWinding(path.PathData, out separatePathForStroke);
+                        fillType = FillType.winding;
+                    }
+                    catch (Exception e)
+                    {
+                        throw new FixFillTypeException(e);
+                    }
+                }
+
                 path.FillType = fillType.Value;
                 if (path.FillType != fillType.Value)
                 {
                     _isFillTypeSupported = false;
                 }
             }
+            return separatePathForStroke;
         }
     }
 }

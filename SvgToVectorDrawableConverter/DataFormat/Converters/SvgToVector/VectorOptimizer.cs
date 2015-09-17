@@ -36,6 +36,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             {
                 path.FillColor = null;
                 path.FillAlpha = 1;
+                path.FillType = FillType.winding;
             }
             if (string.IsNullOrEmpty(path.StrokeColor) || path.StrokeAlpha == 0 || path.StrokeWidth == 0)
             {

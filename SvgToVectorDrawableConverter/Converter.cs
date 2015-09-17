@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector;
+using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 using SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics;
 using SvgToVectorDrawableConverter.Utils;
 using Path = System.IO.Path;
@@ -39,7 +40,7 @@ namespace SvgToVectorDrawableConverter
 
         private static void Convert(Options options)
         {
-            var converter = new SvgToVectorDocumentConverter(options.BlankVectorDrawablePath);
+            var converter = new SvgToVectorDocumentConverter(options.BlankVectorDrawablePath, options.FixFillType);
 
             foreach (var inputFile in Directory.GetFiles(options.InputDirectory, options.InputMask + ".svg", SearchOption.AllDirectories))
             {
@@ -73,6 +74,10 @@ namespace SvgToVectorDrawableConverter
                     {
                         outputDocument.Save(writer);
                     }
+                }
+                catch (FixFillTypeException e)
+                {
+                    PrintError($"{subpath}: Failure due to the --fix-fill-type option. {e.InnerException.Message}");
                 }
                 catch (Exception e)
                 {

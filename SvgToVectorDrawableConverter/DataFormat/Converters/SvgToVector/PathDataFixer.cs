@@ -29,16 +29,16 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
 
             var result = new StringBuilder();
-            foreach (var split in SplitByLetters(pathData))
+            foreach (var split in SplitByCommands(pathData))
             {
                 var command = split[0];
                 var parameters = split.Substring(1).Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
                 Func<IEnumerable<string>, string> join = x => string.Join(" ", x);
 
                 result.Append(command);
-                if (char.ToUpper(split[0]) == moveToUpper && parameters.Length > 2)
+                if (char.ToUpper(command) == moveToUpper && parameters.Length > 2)
                 {
-                    var lineTo = char.IsUpper(split[0]) ? 'L' : 'l';
+                    var lineTo = char.IsUpper(command) ? 'L' : 'l';
                     result.Append(join(parameters.Take(2)));
                     result.Append(lineTo);
                     result.Append(join(parameters.Skip(2)));
@@ -53,12 +53,14 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             return result.ToString();
         }
 
-        private static IEnumerable<string> SplitByLetters(string s)
+        private static IEnumerable<string> SplitByCommands(string s)
         {
-            var split = new StringBuilder(s.Length);
+            Func<char, bool> isCommand = x => "MZLHVCSQTA".IndexOf(char.ToUpperInvariant(x)) >= 0;
+
+            var split = new StringBuilder();
             foreach (var c in s)
             {
-                if (char.IsLetter(c) && split.Length > 0)
+                if (isCommand(c) && split.Length > 0)
                 {
                     yield return split.ToString();
                     split.Clear();
