@@ -211,8 +211,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             if (transform is Transform.Matrix)
             {
                 var matrix = (Transform.Matrix)transform;
-                group.ScaleX = Math.Sign(matrix.A) * Math.Sqrt(matrix.A * matrix.A + matrix.C * matrix.C);
-                group.ScaleY = Math.Sign(matrix.D) * Math.Sqrt(matrix.B * matrix.B + matrix.D * matrix.D);
+                group.ScaleX = (matrix.A >= 0 ? 1 : -1) * Math.Sqrt(matrix.A * matrix.A + matrix.C * matrix.C);
+                group.ScaleY = (matrix.D >= 0 ? 1 : -1) * Math.Sqrt(matrix.B * matrix.B + matrix.D * matrix.D);
                 group.Rotation = Math.Atan(matrix.B / matrix.D) * 180 / Math.PI;
                 group.TranslateX = matrix.E;
                 group.TranslateY = matrix.F;
