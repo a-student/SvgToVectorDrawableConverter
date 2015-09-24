@@ -3,7 +3,7 @@ Batch converter of SVG images to Android VectorDrawable XML resource files.
 
 Put the output XML files into the ‘res/drawable’ directory of your app and reference to them in XML / Java code as to ordinary drawables.
 
-**Online version** of the converter (not batch) is [here](http://a-student.github.io/SvgToVectorDrawableConverter.Web/).
+#### **Online version** of the converter (not batch) is [here](http://a-student.github.io/SvgToVectorDrawableConverter.Web/).
 
 ## Requirements
 Inkscape (free and open-source vector graphics software) must be installed. Download it from https://inkscape.org/en/download
@@ -46,11 +46,14 @@ mono svg2vd.exe -i \*
 Android Studio is able to open vector drawables. Note that it does not handle fill-rule correctly.
 
 ## Not supported SVG features
-These SVG elements are not supported by VectorDrawable: **patterns, masks, gradients.** You need to manually eliminate them from the input files before conversion.
+These SVG elements are not supported by VectorDrawable: **patterns, masks, gradients, images.**
 
-VectorDrawable **fill-rule** is always **nonzero** and cannot be changed.
+VectorDrawable **fill-rule** is always **non-zero** and cannot be changed.
 If you end up with areas filled that should not be filled, that is because the SVG image was created using even-odd rule instead.
-There are two ways to fix this problem: manually edit SVGs in vector graphics software or use the **BetterVectorDrawable** library in your app.
+There are three ways to deal with this problem: try specifying the `--fix-fill-type` option, manually edit SVGs in vector graphics software or use the **BetterVectorDrawable** library in your app.
+
+### Specifying the `--fix-fill-type` option
+This option is experimental, but it is worth trying first. The option uses complex mathematics to rebuild paths in such a way that rendering with any fill-rule leads to the same result.
 
 ### Manual editing
 If you are using Inkscape, open *Object* → *Fill and Stroke…* and in the *Fill* tab choose *Fill is solid unless a subpath is counterdirectional.*
