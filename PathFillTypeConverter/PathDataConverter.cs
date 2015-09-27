@@ -17,9 +17,9 @@ namespace PathFillTypeConverter
                 var convert1 = PathFormatter.ToString(path);
                 path = PathConverter.FixDirections(path);
                 var convert2 = PathFormatter.ToString(path);
-                if (convert1 != convert2)
+                if (convert2 != convert0)
                 {
-                    separatePathForStroke = convert0 != convert1;
+                    separatePathForStroke = convert1 != convert0;
                     return convert2;
                 }
             }

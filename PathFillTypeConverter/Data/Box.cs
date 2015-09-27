@@ -3,7 +3,8 @@ using System.Globalization;
 
 namespace PathFillTypeConverter.Data
 {
-    internal /*immutable*/ struct Box
+    [Serializable]
+    public /*immutable*/ struct Box
     {
         public double MinX { get; }
         public double MaxX { get; }

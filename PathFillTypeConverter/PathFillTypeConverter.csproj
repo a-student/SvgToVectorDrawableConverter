@@ -44,8 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\CurveEquations\CurveEquation.cs" />
+    <Compile Include="Algorithms\CurveEquations\EquationSolver.cs" />
+    <Compile Include="Algorithms\CurveEquations\LineEquation.cs" />
+    <Compile Include="Algorithms\CurveEquations\QuadraticBezierEquation.cs" />
+    <Compile Include="Algorithms\CurveEquations\CubicBezierEquation.cs" />
+    <Compile Include="Algorithms\CurveEquations\EllipticalArcEquation.cs" />
     <Compile Include="Algorithms\PathConverter.cs" />
     <Compile Include="Algorithms\PathPreprocessor.cs" />
+    <Compile Include="Algorithms\SegmentSplitter.cs" />
+    <Compile Include="Algorithms\SubpathComparer.cs" />
+    <Compile Include="Algorithms\SubpathFillAreaCalculator.cs" />
     <Compile Include="Algorithms\SubpathSplitter.cs" />
     <Compile Include="Algorithms\IntersectionsCalculator.cs" />
     <Compile Include="Algorithms\PiecewiseLinearApproximator.cs" />
@@ -53,6 +62,7 @@
     <Compile Include="Algorithms\PointInsidePolygonCalculator.cs" />
     <Compile Include="Algorithms\SubpathDirectionCalculator.cs" />
     <Compile Include="Algorithms\SubpathDirectionReverser.cs" />
+    <Compile Include="Algorithms\SubpathUnifier.cs" />
     <Compile Include="Algorithms\TreeBuilder.cs" />
     <Compile Include="Data\Box.cs" />
     <Compile Include="Data\EllipticalArcSegment.cs" />
@@ -69,6 +79,7 @@
     <Compile Include="Exceptions\PathDataConverterException.cs" />
     <Compile Include="Extensions\DoubleExtension.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
+    <Compile Include="Extensions\Linq.cs" />
     <Compile Include="PathDataConverter.cs" />
     <Compile Include="PathFormatter.cs" />
     <Compile Include="PathParser.cs" />

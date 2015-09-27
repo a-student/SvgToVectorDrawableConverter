@@ -246,7 +246,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
 
             var clipPath = style["clip-path"];
-            if (!string.IsNullOrEmpty(clipPath))
+            if (!string.IsNullOrEmpty(clipPath) && clipPath != "none")
             {
                 var match = Regex.Match(clipPath, @"^url\(#(?<key>.+)\)$");
                 if (!match.Success)

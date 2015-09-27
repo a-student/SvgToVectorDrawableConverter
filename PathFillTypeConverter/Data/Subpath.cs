@@ -6,7 +6,8 @@ using PathFillTypeConverter.Extensions;
 
 namespace PathFillTypeConverter.Data
 {
-    internal class Subpath
+    [Serializable]
+    public class Subpath
     {
         public Point StartPoint { get; }
         [NotNull]
@@ -26,11 +27,13 @@ namespace PathFillTypeConverter.Data
                 throw new ArgumentException();
             }
 
-            if (Segments.Count > 0 && Segments.Last().EndPoint != StartPoint)
+            if (Segments.Count > 0 && EndPoint != StartPoint)
             {
                 _closingSegment = new LineSegment(StartPoint);
             }
         }
+
+        public Point EndPoint => Segments.Last().EndPoint;
 
         private bool _builtPolylineApproximations;
 
@@ -66,7 +69,7 @@ namespace PathFillTypeConverter.Data
             }
         }
 
-        public bool HasClosingSegment => _closingSegment != null;
-        public IEnumerable<SegmentBase> ClosedSegments => HasClosingSegment ? Segments.Concat(new[] { _closingSegment }) : Segments;
+        public bool AreSegmentsClosed => _closingSegment == null;
+        public IEnumerable<SegmentBase> ClosedSegments => AreSegmentsClosed ? Segments : Segments.Concat(new[] { _closingSegment });
     }
 }

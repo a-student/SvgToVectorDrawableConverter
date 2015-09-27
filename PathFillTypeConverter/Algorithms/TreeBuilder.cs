@@ -18,9 +18,11 @@ namespace PathFillTypeConverter.Algorithms
         /// </summary>
         private static bool Contains(Subpath parent, Subpath child)
         {
-            // Due to the assumption just check one point
-            // do not pick a point on the child border
-            return PointInPolygonTest.Contains(parent.PolygonApproximation, child.PolygonApproximation.InsidePoint);
+            if (!PointInPolygonTest.Contains(parent.PolygonApproximation, child.PolygonApproximation.InsidePoint))
+            {
+                return false;
+            }
+            return child.PolygonApproximation.Points.Any(x => PointInPolygonTest.Contains(parent.PolygonApproximation, x));
         }
 
         /// <summary>
@@ -32,19 +34,30 @@ namespace PathFillTypeConverter.Algorithms
             var roots = new List<TreeNode<Subpath>>();
             foreach (var subpath in path.Subpaths)
             {
-                (FindNode(roots, subpath)?.Children ?? roots).Add(new TreeNode<Subpath> { AssociatedObject = subpath });
+                var node = new TreeNode<Subpath> { AssociatedObject = subpath };
+                var nodes = FindParent(roots, subpath)?.Children ?? roots;
+                for (var i = 0; i < nodes.Count; i++)
+                {
+                    var child = nodes[i];
+                    if (Contains(subpath, child.AssociatedObject))
+                    {
+                        nodes.RemoveAt(i--);
+                        node.Children.Add(child);
+                    }
+                }
+                nodes.Add(node);
             }
             return roots;
         }
 
-        private static TreeNode<Subpath> FindNode(IEnumerable<TreeNode<Subpath>> nodes, Subpath subpath)
+        private static TreeNode<Subpath> FindParent(IEnumerable<TreeNode<Subpath>> nodes, Subpath subpath)
         {
-            var node = nodes.FirstOrDefault(x => Contains(x.AssociatedObject, subpath));
-            if (node == null)
+            var parent = nodes.FirstOrDefault(x => Contains(x.AssociatedObject, subpath));
+            if (parent == null)
             {
                 return null;
             }
-            return FindNode(node.Children, subpath) ?? node;
+            return FindParent(parent.Children, subpath) ?? parent;
         }
     }
 }

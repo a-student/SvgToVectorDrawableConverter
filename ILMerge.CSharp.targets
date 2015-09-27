@@ -5,13 +5,17 @@
     <ILMergeTool Include="$(SolutionDir)\packages\ILMerge.*\tools\ILMerge.exe" />
   </ItemGroup>
 
-  <Target Name="AfterBuild">
+  <Target Name="AfterBuild" Condition="'$(Configuration)'=='Release'">
     <CreateItem Include="@(ReferencePath)" Condition="'%(CopyLocal)'=='true'">
       <Output TaskParameter="Include" ItemName="ILMergeAssemblies" />
     </CreateItem>
     <Message Text="MERGING: @(ILMergeAssemblies->'%(Filename)')" Importance="High" />
-    <Exec Command="&quot;@(ILMergeTool->'%(FullPath)')&quot; /out:&quot;@(MainAssembly)&quot; &quot;@(IntermediateAssembly)&quot; @(ILMergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
+    <Exec Command="&quot;@(ILMergeTool->'%(FullPath)')&quot; /out:&quot;@(MainAssembly)&quot; &quot;@(IntermediateAssembly)&quot; @(ILMergeAssemblies->'&quot;%(FullPath)&quot;', ' ') /ndebug" />
   </Target>
 
-  <Target Name="_CopyFilesMarkedCopyLocal" />
+  <Target Name="AfterResolveReferences" Condition="'$(Configuration)'=='Release'">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
+    </ItemGroup>
+  </Target>
 </Project>

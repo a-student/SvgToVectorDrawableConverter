@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace PathFillTypeConverter.Data
 {
-    internal abstract class SegmentBase
+    [Serializable]
+    public abstract class SegmentBase
     {
         public abstract Point EndPoint { get; }
 
@@ -20,7 +22,9 @@ namespace PathFillTypeConverter.Data
         [NotNull]
         protected abstract IEnumerable<Point> GetPiecewiseLinearApproximation(Point startPoint);
 
-        public IList<Point> Intersections { get; } = new List<Point>();
+        public ISet<Point> Intersections { get; } = new HashSet<Point>();
+
+        public abstract Point SplitByNextIntersection(Point startPoint, out SegmentBase segment1, out SegmentBase segment2);
 
         [NotNull]
         public abstract SegmentBase Reverse(Point startPoint);

@@ -1,0 +1,39 @@
+﻿<Window
+    x:Class="PathDebuggerVisualizer.VisualizerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d"
+    WindowStyle="ToolWindow"
+    ResizeMode="NoResize"
+    SizeToContent="WidthAndHeight"
+    ShowInTaskbar="False"
+    Title="Visualizer"
+    Background="White"
+    MouseMove="Window_MouseMove"
+    MouseDown="Window_MouseDown"
+    KeyDown="Window_KeyDown">
+
+    <StackPanel
+        Margin="10">
+
+        <ComboBox
+            x:Name="ComboBox"
+            MinWidth="100"
+            SelectedIndex="0"
+            SelectionChanged="ComboBox_SelectionChanged">
+
+            <system:String>Even odd</system:String>
+            <system:String>Non zero</system:String>
+        </ComboBox>
+
+        <TextBlock
+            x:Name="TextBlock"
+            Margin="0, 10"/>
+
+        <Grid
+            x:Name="PathGrid" />
+    </StackPanel>
+</Window>

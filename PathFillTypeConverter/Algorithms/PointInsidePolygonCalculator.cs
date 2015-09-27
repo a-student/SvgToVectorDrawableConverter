@@ -23,7 +23,7 @@ namespace PathFillTypeConverter.Algorithms
             }
             xIntersections.Sort();
             Debugger.BreakWhen(xIntersections.Count == 0 || xIntersections.Count % 2 != 0);
-            double x = 0;
+            var x = (boundingBox.MinX + boundingBox.MaxX) / 2;
             var maxDelta = double.NegativeInfinity;
             for (var i = 0; i < xIntersections.Count - 1; i += 2)
             {

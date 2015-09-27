@@ -6,7 +6,8 @@ using PathFillTypeConverter.Extensions;
 
 namespace PathFillTypeConverter.Data
 {
-    internal class Path
+    [Serializable]
+    public class Path
     {
         [NotNull]
         public IReadOnlyList<Subpath> Subpaths { get; }
@@ -19,11 +20,6 @@ namespace PathFillTypeConverter.Data
             {
                 throw new ArgumentException();
             }
-        }
-
-        public override string ToString()
-        {
-            return string.Join(" - ", Subpaths.Select(x => x.PolygonApproximation.ToString()));
         }
     }
 }

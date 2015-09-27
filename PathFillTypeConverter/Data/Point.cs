@@ -4,7 +4,8 @@ using PathFillTypeConverter.Extensions;
 
 namespace PathFillTypeConverter.Data
 {
-    internal /*immutable*/ struct Point : IEquatable<Point>
+    [Serializable]
+    public /*immutable*/ struct Point : IEquatable<Point>
     {
         public double X { get; }
         public double Y { get; }
@@ -28,6 +29,11 @@ namespace PathFillTypeConverter.Data
         public static Point operator -(Point p1, Point p2)
         {
             return new Point(p1.X - p2.X, p1.Y - p2.Y);
+        }
+
+        public static Point operator -(Point p)
+        {
+            return new Point(-p.X, -p.Y);
         }
 
         public static Point operator *(double d, Point p)
@@ -71,7 +77,7 @@ namespace PathFillTypeConverter.Data
 
         public override int GetHashCode()
         {
-            return unchecked(X.GetHashCode() * 397) ^ Y.GetHashCode();
+            return unchecked(X.RoundToPrecision().GetHashCode() * 397) ^ Y.RoundToPrecision().GetHashCode();
         }
     }
 }
