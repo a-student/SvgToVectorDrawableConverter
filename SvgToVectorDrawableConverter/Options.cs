@@ -81,6 +81,9 @@ namespace SvgToVectorDrawableConverter
         [Option("fix-fill-type", HelpText = "Experimental.")]
         public bool FixFillType { get; set; }
 
+        [Option("no-update-check", HelpText = "Skip everyday check for the latest converter version.")]
+        public bool NoUpdateCheck { get; set; }
+
         [ParserState]
         public IParserState LastParserState { get; set; }
 
@@ -89,7 +92,7 @@ namespace SvgToVectorDrawableConverter
         {
             var helpText = new HelpText { AddDashesToOption = true };
             HelpText.DefaultParsingErrorsHandler(this, helpText);
-            helpText.AddPreOptionsLine($"Usage: {App.ExeName} -i <input file mask> [-o <output directory>] [--lib <lib name>] [--inkscape <inkscape app path>] [--fix-fill-type]");
+            helpText.AddPreOptionsLine($"Usage: {App.ExeName} -i <input file mask> [-o <output directory>] [--lib <lib name>] [--inkscape <inkscape app path>] [--fix-fill-type] [--no-update-check]");
             helpText.AddOptions(this);
             helpText.AddPostOptionsLine(GetGithub());
             return helpText;
