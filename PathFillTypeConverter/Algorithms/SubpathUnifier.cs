@@ -102,21 +102,13 @@ namespace PathFillTypeConverter.Algorithms
                 return concatenations[0];
             }
             return concatenations
-                .Select(x => new { Concatenation = x, Angle = Angle(subpath, x) })
-                .MinBy(x => x.Angle)
-                .Concatenation;
-        }
-
-        private static double Angle(Subpath subpath, Subpath concatenation)
-        {
-            var points1 = subpath.PolygonApproximation.Points;
-            var points2 = concatenation.PolygonApproximation.Points;
-            var angle = Angle(points1.Last() - points1.LastButOne(), points2.Second() - points2.First());
-            if (angle == 0)
-            {
-                throw new NotImplementedException();
-            }
-            return angle;
+                .MinBy(
+                    x =>
+                    {
+                        var points1 = subpath.PolygonApproximation.Points;
+                        var points2 = x.PolygonApproximation.Points;
+                        return Angle(points1.Last() - points1.LastButOne(), points2.Second() - points2.First());
+                    });
         }
 
         private static double Angle(Point p1, Point p2)
