@@ -56,7 +56,7 @@ namespace SvgToVectorDrawableConverter
             var latestVersion = LatestVersion;
             if (latestVersion != null && latestVersion - _currentVersion > TimeSpan.FromDays(3))
             {
-                Console.WriteLine("New converter version is available! Please, update from https://github.com/a-student/SvgToVectorDrawableConverter/releases");
+                Console.WriteLine("New converter version is available! Please, update from https://github.com/a-student/SvgToVectorDrawableConverter/releases/latest");
                 return true;
             }
             return false;
