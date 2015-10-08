@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
+using PathFillTypeConverter.Utils;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
@@ -29,10 +30,10 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
 
             var result = new StringBuilder();
-            foreach (var split in SplitByCommands(pathData))
+            foreach (var split in PathDataSplitter.SplitByCommands(pathData))
             {
                 var command = split[0];
-                var parameters = split.Substring(1).Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = PathDataSplitter.SplitParameters(split.Substring(1)).ToArray();
                 Func<IEnumerable<string>, string> join = x => string.Join(" ", x);
 
                 result.Append(command);
@@ -51,26 +52,6 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
             result[0] = moveToUpper;
             return result.ToString();
-        }
-
-        private static IEnumerable<string> SplitByCommands(string s)
-        {
-            Func<char, bool> isCommand = x => "MZLHVCSQTA".IndexOf(char.ToUpperInvariant(x)) >= 0;
-
-            var split = new StringBuilder();
-            foreach (var c in s)
-            {
-                if (isCommand(c) && split.Length > 0)
-                {
-                    yield return split.ToString();
-                    split.Clear();
-                }
-                split.Append(c);
-            }
-            if (split.Length > 0)
-            {
-                yield return split.ToString();
-            }
         }
     }
 }

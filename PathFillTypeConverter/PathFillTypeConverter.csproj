@@ -85,6 +85,7 @@
     <Compile Include="PathParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\MathHelper.cs" />
+    <Compile Include="Utils\PathDataSplitter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

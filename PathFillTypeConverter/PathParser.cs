@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using JetBrains.Annotations;
 using PathFillTypeConverter.Data;
 using PathFillTypeConverter.Exceptions;
+using PathFillTypeConverter.Utils;
 
 namespace PathFillTypeConverter
 {
@@ -30,28 +30,14 @@ namespace PathFillTypeConverter
 
         private static IEnumerable<string> SplitPathData(string pathData)
         {
-            Func<char, bool> isCommand = x => "MZLHVCSQTA".IndexOf(char.ToUpperInvariant(x)) >= 0,
-                isDelimiter = x => char.IsWhiteSpace(x) || x == ',';
-
-            var buffer = new StringBuilder();
-            foreach (var c in Enumerable.Concat(pathData, new[] { ' ' }))
+            foreach (var split in PathDataSplitter.SplitByCommands(pathData))
             {
-                var command = isCommand(c);
-                if (command || isDelimiter(c))
+                yield return split[0].ToString();
+                var parameters = PathDataSplitter.SplitParameters(split.Substring(1));
+                foreach (var x in parameters)
                 {
-                    var split = buffer.ToString().Trim();
-                    if (split.Length > 0)
-                    {
-                        yield return split;
-                    }
-                    buffer.Clear();
-                    if (command)
-                    {
-                        yield return c.ToString();
-                    }
-                    continue;
+                    yield return x;
                 }
-                buffer.Append(c);
             }
         }
 
