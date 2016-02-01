@@ -36,7 +36,7 @@ namespace PathFillTypeConverter.Algorithms.CurveEquations
                 _ry *= lambda;
             }
 
-            var sqrt = Sqrt(Square(_rx * _ry) / (Square(_rx * y1) + Square(x1 * _ry)) - 1);
+            var sqrt = Sqrt(Abs(Square(_rx * _ry) / (Square(_rx * y1) + Square(x1 * _ry)) - 1));
             var sign = segment.IsLargeArc != segment.IsSweep ? 1 : -1;
             var cx1 = sign * sqrt * _rx * y1 / _ry;
             var cy1 = -sign * sqrt * _ry * x1 / _rx;
