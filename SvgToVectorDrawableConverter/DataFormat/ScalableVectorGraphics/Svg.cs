@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Windows;
 using System.Xml;
 using JetBrains.Annotations;
@@ -32,7 +33,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
                 }
                 try
                 {
-                    return Parser.ParseViewBox($"0 0 {UnitConverter.ConvertToPx(Width, -1)} {UnitConverter.ConvertToPx(Height, -1)}");
+                    return Parser.ParseViewBox($"0 0 {UnitConverter.ConvertToPx(Width, -1).ToString(CultureInfo.InvariantCulture)} {UnitConverter.ConvertToPx(Height, -1).ToString(CultureInfo.InvariantCulture)}");
                 }
                 catch (Exception e)
                 {
