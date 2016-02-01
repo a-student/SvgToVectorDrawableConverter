@@ -38,6 +38,10 @@ namespace SvgToVectorDrawableConverter.DataFormat.Utils
                 if (childNode.Name == "use")
                 {
                     var href = childNode.Attributes.GetNamedItem("href", "http://www.w3.org/1999/xlink");
+                    if (href == null)
+                    {
+                        throw new UnsupportedFormatException("Use element must define href attribute.");
+                    }
                     var hrefValue = href.Value;
                     if (!hrefValue.StartsWith("#"))
                     {
