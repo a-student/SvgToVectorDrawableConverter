@@ -4,6 +4,7 @@ using System.Windows;
 using System.Xml;
 using JetBrains.Annotations;
 using SvgToVectorDrawableConverter.DataFormat.Common;
+using SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 
 namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
@@ -31,7 +32,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics
                 }
                 try
                 {
-                    return Parser.ParseViewBox($"0 0 {Width} {Height}");
+                    return Parser.ParseViewBox($"0 0 {UnitConverter.ConvertToPx(Width, -1)} {UnitConverter.ConvertToPx(Height, -1)}");
                 }
                 catch (Exception e)
                 {
