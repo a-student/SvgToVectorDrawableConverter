@@ -31,12 +31,14 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
         private bool _isFillTypeSupported;
         private bool _isStrokeDasharrayUsed;
+        private bool _isGroupOpacityUsed;
         private readonly HashSet<string> _unsupportedElements = new HashSet<string>();
 
         private void Reset()
         {
             _isFillTypeSupported = true;
             _isStrokeDasharrayUsed = false;
+            _isGroupOpacityUsed = false;
             _unsupportedElements.Clear();
         }
 
@@ -53,6 +55,10 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 if (_isStrokeDasharrayUsed)
                 {
                     warnings.Add("The stroke-dasharray attribute is not supported.");
+                }
+                if (_isGroupOpacityUsed)
+                {
+                    warnings.Add("Group opacity is not supported on Android. Please, apply opacity to path elements instead of a group.");
                 }
                 if (_unsupportedElements.Count > 0)
                 {
@@ -121,6 +127,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             var style = StyleHelper.MergeStyles(parentStyle, g.Style);
             Init(group, g.Transform, style);
             AppendAll(group.Children, g.Children, style);
+
+            _isGroupOpacityUsed |= style["opacity"] != null;
         }
 
         private void AppendAll(ElementCollection elements, ElementCollection children, StringDictionary parentStyle)
