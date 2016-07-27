@@ -28,7 +28,7 @@ svg2vd.exe -i *
 (Converts all SVG files in current directory.)
 
 ## Running on OS X
-OS X 10.7 or better and Mono are required. If you do not have Mono installed, please download and install it from http://www.mono-project.com/download
+OS X 10.7 or better, Mono and Inkscape are required. If you do not have Mono installed, please download and install it from http://www.mono-project.com/download and if you do not have Inkscape installed, please download and install it from https://inkscape.org/pt-br/download/mac-os/
 
 Open terminal and run
 ```
@@ -41,6 +41,33 @@ Typical usage:
 mono svg2vd.exe -i \*
 ```
 (Converts all SVG files in current directory.)
+
+## Running on Linux
+Mono and Inkscape are required:
+
+```
+sudo apt-get install mono-runtime inkscape
+```
+
+Open terminal and run
+```
+./svg2vd.exe --help
+```
+
+or
+
+```
+mono svg2vd.exe --help
+```
+
+This command prints usage and option explanations.
+
+Typical usage:
+```
+mono svg2vd.exe -i \*
+```
+(Converts all SVG files in current directory.)
+
 
 ## Previewing vector drawables
 Android Studio is able to open vector drawables. Note that it does not handle fill-rule correctly.
